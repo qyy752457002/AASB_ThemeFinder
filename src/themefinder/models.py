@@ -10,10 +10,10 @@ class Position(str, Enum):
     UNCLEAR = "UNCLEAR"
 
     # Type B – Option-selection questions (Q1, Q28)
-    OPTION_A = "A"
-    OPTION_B = "B"
-    OPTION_C = "C"
-    OPTION_D = "D"
+    OPTION_A = "a"
+    OPTION_B = "b"
+    OPTION_C = "c"
+    OPTION_D = "d"
     OPTION_I = "I"
     OPTION_II = "II"
     OPTION_III = "III"

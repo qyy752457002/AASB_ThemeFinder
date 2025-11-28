@@ -39,7 +39,7 @@ Examples:
 
 **POSITION options:**
 
-* For Q1: `A`, `B`, `C`, `D`, or `UNCLEAR`
+* For Q1: `a`, `b`, `c`, `d`, or `UNCLEAR`
 * For Q28: `I`, `II`, `III`, `IV`, `V`, or `UNCLEAR`
 
 If the response clearly prefers one option (even implicitly), choose the corresponding letter.
@@ -124,7 +124,7 @@ Response: "We support the changes and believe they improve clarity."
 ### **Example 2 — Option-Selection question (Q1)**
 
 Response: "We prefer aligning with IFRS S1 but do not support Options 1–3."
-→ POSITION: D (if option (d) = another approach)
+→ POSITION: d (if option (d) = another approach)
 
 ---
 
