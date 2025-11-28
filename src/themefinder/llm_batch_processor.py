@@ -21,7 +21,6 @@ from tenacity import (
 
 from themefinder.themefinder_logging import logger
 
-
 @dataclass
 class BatchPrompt:
     prompt_string: str
@@ -114,7 +113,10 @@ def load_prompt_from_file(file_path: str | Path) -> str:
         str: Content of the prompt template file.
     """
     parent_dir = Path(__file__).parent
-    with Path.open(parent_dir / "prompts" / f"{file_path}.txt") as file:
+    prompt_file = parent_dir / "prompts" / f"{file_path}.txt"
+
+    # FIX: Explicitly specify UTF-8 encoding
+    with open(prompt_file, "r", encoding="utf-8") as file:
         return file.read()
 
 

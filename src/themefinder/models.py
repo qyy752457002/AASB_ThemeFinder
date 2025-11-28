@@ -1,15 +1,31 @@
 from typing import List, Optional
 from enum import Enum
 from pydantic import BaseModel, Field, model_validator
-
-
 class Position(str, Enum):
-    """Enum for valid position values"""
+    """All valid POSITION values across sentiment prompt question types."""
 
+    # Type A – Agreement questions
     AGREEMENT = "AGREEMENT"
     DISAGREEMENT = "DISAGREEMENT"
     UNCLEAR = "UNCLEAR"
 
+    # Type B – Option-selection questions (Q1, Q28)
+    OPTION_A = "A"
+    OPTION_B = "B"
+    OPTION_C = "C"
+    OPTION_D = "D"
+    OPTION_I = "I"
+    OPTION_II = "II"
+    OPTION_III = "III"
+    OPTION_IV = "IV"
+    OPTION_V = "V"
+
+    # Type C – Yes/No questions (Q30–Q34)
+    YES = "YES"
+    NO = "NO"
+
+    # Type D – Open-ended questions (Q24, Q27, Q31, Q35)
+    ANSWER_PROVIDED = "ANSWER_PROVIDED"
 
 class Stance(str, Enum):
     """Enum for valid stance values"""
@@ -165,7 +181,7 @@ class Theme(ValidatedModel):
     )
     position: Position = Field(
         ...,
-        description="SENTIMENT ABOUT THIS TOPIC (AGREEMENT, DISAGREEMENT, OR UNCLEAR)",
+        description="SENTIMENT ABOUT THIS TOPIC",
     )
 
 

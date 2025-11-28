@@ -13,6 +13,7 @@ from themefinder.models import (
     ThemeRefinementResponses,
     DetailDetectionOutput,
     DetailDetectionResponses,
+    SentimentAnalysisOutput,
 )
 
 
@@ -75,6 +76,22 @@ class TestTheme:
                 topic_description="Access to affordable healthcare services",
                 position="AGREE",
             )
+
+
+class TestSentimentAnalysisOutput:
+    @pytest.mark.parametrize(
+        "position",
+        [
+            Position.AGREEMENT,
+            Position.OPTION_A,
+            Position.OPTION_IV,
+            Position.YES,
+            Position.ANSWER_PROVIDED,
+        ],
+    )
+    def test_valid_extended_positions(self, position):
+        output = SentimentAnalysisOutput(response_id=1, position=position)
+        assert output.position == position
 
 
 class TestThemeGenerationResponses:

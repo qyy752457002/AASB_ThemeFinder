@@ -1,41 +1,144 @@
 {system_prompt}
 
-You will receive a list of RESPONSES, each containing a response_id and a response.
-Your job is to analyze each response to the QUESTION below and decide:
+You will receive:
 
-POSITION - is the response AGREEING or DISAGREEING or is it UNCLEAR about the change being proposed in the question.
-Choose one from [AGREEMENT, DISAGREEMENT, UNCLEAR]
+1. A **QUESTION** drawn from the AASB ED SR1 list (Q1–Q35).
+2. A list of **RESPONSES**, each containing a `response_id` and a `response` text.
 
-You MUST include every response ID in the output.
-If the response can not be labelled return empty sections where appropriate but you MUST return an entry
-with the correct response ID for each input object
+Your task is to analyze each response and assign an appropriate **POSITION** based on the type of QUESTION being asked.
 
-You MUST pick one of the given POSITION values.
-You MUST not return an empty value for the POSITION of a response.
+Different questions require different POSITION categories. You must determine the correct category according to the question type described below.
 
-## EXAMPLE
-Example 1:
-Question: \n What are your thoughts on the proposed government changes to the policy about reducing school holidays?
-Response: \n as a parent I have no idea why you would make this change. I guess you were thinking about increasing productivity but any productivity gains would be totally offset by the decrease in family time. \n
+---
 
-Output:
-POSITION: DISAGREEMENT
+# **1. Determine the Question Type**
 
-Example 2:
-Question: \n What are your thoughts on the proposed government changes to the policy about reducing school holidays?
-Response: \n I think this is a great idea, our children will learn more if they are in school more \n
+Before evaluating the responses, classify the QUESTION into one of the following types:
 
-Output:
-POSITION: AGREEMENT
+### **Type A — Agreement Questions**
 
-Example 3:
-Question: \n What are your thoughts on the proposed government changes to the policy about reducing school holidays?
-Response: \n it will be good for our children to be around their friends more but it will be hard for some parents spend
-less time with their children \n
+These questions ask whether the respondent *agrees with a proposal*.
+Examples: Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12–Q23, Q25, Q26, Q29.
 
-Output:
-POSITION: UNCLEAR
+**POSITION options:**
 
+* `AGREEMENT`
+* `DISAGREEMENT`
+* `UNCLEAR`
+
+---
+
+### **Type B — Option-Selection Questions**
+
+These questions require choosing from multiple options.
+
+Examples:
+
+* **Q1** (Options a, b, c, d)
+* **Q28** (Options i, ii, iii, iv, v)
+
+**POSITION options:**
+
+* For Q1: `A`, `B`, `C`, `D`, or `UNCLEAR`
+* For Q28: `I`, `II`, `III`, `IV`, `V`, or `UNCLEAR`
+
+If the response clearly prefers one option (even implicitly), choose the corresponding letter.
+If multiple options are mentioned but no preference is expressed, choose `UNCLEAR`.
+
+---
+
+### **Type C — Yes/No Questions**
+
+Examples:
+
+* **Q30–Q34**
+  These questions ask whether the proposal is appropriate, creates issues, is useful, etc.
+
+**POSITION options:**
+
+* `YES`
+* `NO`
+* `UNCLEAR`
+
+Interpret supportive or positive wording as **YES**; opposing or negative wording as **NO**.
+
+---
+
+### **Type D — Open-Ended Questions**
+
+These questions do not express agreement/choice and instead ask for explanations, details, or suggestions.
+
+Examples:
+
+* Q24
+* Q27
+* Q31 (if purely descriptive)
+* Q35
+
+**POSITION options:**
+
+* `ANSWER_PROVIDED`
+* `UNCLEAR`
+
+If the response meaningfully answers the question → `ANSWER_PROVIDED`.
+If the response is irrelevant, contradictory, or non-responsive → `UNCLEAR`.
+
+---
+
+# **2. Output Requirements**
+
+For **every** response object you MUST:
+
+* Return an entry with the **correct `response_id`**
+* Include a **POSITION** using the **correct category** based on the question type
+* Never leave POSITION empty
+
+Do **not** invent content.
+Do **not** reinterpret the QUESTION.
+Judge only what is explicitly written in the response.
+
+---
+
+# **3. Output Format**
+
+For each response:
+
+```
+response_id: <ID>
+POSITION: <one of the allowed values>
+```
+
+If multiple responses are passed, output them sequentially.
+
+---
+
+# **4. Examples**
+
+### **Example 1 — Agreement-type question**
+
+Response: "We support the changes and believe they improve clarity."
+→ POSITION: AGREEMENT
+
+---
+
+### **Example 2 — Option-Selection question (Q1)**
+
+Response: "We prefer aligning with IFRS S1 but do not support Options 1–3."
+→ POSITION: D (if option (d) = another approach)
+
+---
+
+### **Example 3 — Yes/No question**
+
+Response: "Some parts work, but overall the framework has issues."
+→ POSITION: NO
+
+---
+
+### **Example 4 — Open-ended question (Q24)**
+
+Response: "Additional guidance is needed regarding value-chain boundaries."
+→ POSITION: ANSWER_PROVIDED
 
 QUESTION: \n {question}
 RESPONSES: \n {responses}
