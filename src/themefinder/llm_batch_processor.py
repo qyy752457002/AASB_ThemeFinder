@@ -21,6 +21,7 @@ from tenacity import (
 
 from themefinder.themefinder_logging import logger
 
+
 @dataclass
 class BatchPrompt:
     prompt_string: str
@@ -103,21 +104,29 @@ async def batch_and_run(
 
 
 def load_prompt_from_file(file_path: str | Path) -> str:
-    """Load a prompt template from a text file in the prompts directory.
-
-    Args:
-        file_path (str | Path): Name of the prompt file (without .txt extension)
-            or Path object pointing to the file.
-
-    Returns:
-        str: Content of the prompt template file.
     """
-    parent_dir = Path(__file__).parent
-    prompt_file = parent_dir / "prompts" / f"{file_path}.txt"
+    Load a prompt template from a text file inside the `prompts` directory.
+    Accepts:
+        - 'sentiment' (str)
+        - Path('sentiment.txt')
+        - Path('/abs/path/to/sentiment.txt')
+    Always returns UTF-8 decoded text.
+    """
+    file_path = Path(file_path)
 
-    # FIX: Explicitly specify UTF-8 encoding
-    with open(prompt_file, "r", encoding="utf-8") as file:
-        return file.read()
+    parent_dir = Path(__file__).parent
+    prompts_dir = parent_dir / "prompts"
+
+    # Case 1: User only passed base name ('sentiment')
+    if file_path.suffix == "":
+        full_path = prompts_dir / f"{file_path}.txt"
+    else:
+        # Case 2: Already a path, maybe relative or absolute
+        full_path = file_path
+
+    # Read with UTF-8, solve GBK decode error
+    with open(full_path, "r", encoding="utf-8") as f:
+        return f.read()
 
 
 def convert_to_prompt_template(prompt_template: str | Path | PromptTemplate):
@@ -136,15 +145,19 @@ def convert_to_prompt_template(prompt_template: str | Path | PromptTemplate):
         TypeError: If prompt_template is not one of the expected types.
         FileNotFoundError: If using str/Path input and the prompt file doesn't exist.
     """
-    if isinstance(prompt_template, str | Path):
+    # Already a PromptTemplate → return directly
+    if isinstance(prompt_template, PromptTemplate):
+        return prompt_template
+
+    # str or Path → load file content
+    if isinstance(prompt_template, (str, Path)):
         prompt_content = load_prompt_from_file(prompt_template)
-        template = PromptTemplate.from_template(template=prompt_content)
-    elif isinstance(prompt_template, PromptTemplate):
-        template = prompt_template
-    else:
-        msg = "Invalid prompt_template type. Expected str, Path, or PromptTemplate."
-        raise TypeError(msg)
-    return template
+        return PromptTemplate.from_template(template=prompt_content)
+
+    # Unsupported type
+    raise TypeError(
+        "Invalid prompt_template type. Expected str, Path, or PromptTemplate."
+    )
 
 
 def partition_dataframe(

@@ -16,11 +16,12 @@ Your task is to analyze each response and decide which topics are present. Guide
     - Each response can be assigned to multiple topics if it matches more than one topic from the TOPIC LIST.
     - Each topic can only be assigned once per response, if the topic is mentioned more than once use the first mention for reasoning and stance.
     - There is no limit on how many topics can be assigned to a response.
+    - **IMPORTANT**: If a response is empty, blank, or cannot be matched to any topic, you MUST assign ["UNCLEAR"] to the labels field. The labels list must NEVER be empty.
 
 You MUST include every response ID in the output.
-If the response can not be labelled return empty sections where appropriate but you MUST return an entry
-with the correct response ID for each input object.
-You must only return the alphabetic topic_ids in the labels section.
+If the response can not be labelled or is empty, you MUST still return an entry with the correct response ID.
+**CRITICAL**: The "labels" field must NEVER be an empty list. If a response cannot be matched to any topic, use ["UNCLEAR"] as a default label.
+You must only return the alphabetic topic_ids in the labels section. For unmatched responses, use ["UNCLEAR"].
 
 
 QUESTION:

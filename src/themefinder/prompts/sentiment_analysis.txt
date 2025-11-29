@@ -1,125 +1,204 @@
 {system_prompt}
 
-You will receive a QUESTION from the AASB Exposure Draft ED SR1 consultation
-and a list of RESPONSES, each containing a response_id and a response.
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
+Your task is to classify each response into a POSITION based on the QUESTION TYPE.
 
-Your task is to analyze each response and determine the responder’s POSITION
-relative to the QUESTION. Because ED SR1 questions vary in structure,
-you must choose the POSITION from the correct label set depending on the type
-of QUESTION being asked.
+Every response contains a response_id and response text.
+You MUST classify each response according to the rules below.
 
-You MUST include every response_id in your output.
-You MUST NOT leave POSITION empty.
-When a response cannot be meaningfully labelled, return UNCLEAR or the
-appropriate fallback label, but an entry MUST be returned for each response_id.
+Your classification MUST:
 
-------------------------------------------------------------
-QUESTION TYPE LOGIC
-------------------------------------------------------------
+1. Include every response_id exactly once,
+2. Assign exactly one POSITION per response,
+3. Use only the allowed POSITION values for that question type,
+4. Even if the response is empty, still assign a POSITION.
 
-Different ED SR1 questions require different POSITION label sets.
-Before labeling, determine which question type the QUESTION belongs to.
+==================================================
+QUESTION TYPES 
+==================================================
 
-------------------------------------------------------------
-TYPE A — AGREEMENT QUESTIONS
-(used for questions that ask “Do you agree...?”, “Do you support...?”, etc.)
+All 35 questions in ED SR1 fall into exactly **three** question types:
 
-Allowed POSITION values:
+--------------------------------------------------
+1. **Standard Agree/Disagree Questions**
+(These ask whether the respondent supports the AASB’s proposal.)
+
+Applies to:
+Q2, Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q11, Q13–Q20, Q22, Q23, Q25, Q26, Q27, Q29
+
+Valid POSITION values are:
+
 [AGREEMENT, DISAGREEMENT, UNCLEAR]
 
-• AGREEMENT: clearly supports the proposal in the question
-• DISAGREEMENT: clearly opposes the proposal in the question
-• UNCLEAR: ambiguous, mixed, or insufficient information
+--------------------------------------------------
+2. **Multiple-Option Selection Questions**
+(Choosing Option 1, 2, 3 or an alternative.)
 
-Examples:
-Q2, Q3, Q4, Q5 … (most Q2–Q23, Q25–Q29)
+Applies only to:
+Q1
 
-------------------------------------------------------------
-TYPE B — MULTIPLE-CHOICE QUESTIONS
-(used when the question asks the responder to choose between Option (a), (b), (c), (d))
+Valid POSITION values are:
 
-Allowed POSITION values:
-[OPTION_A, OPTION_B, OPTION_C, OPTION_D, OTHER_OPTION, UNCLEAR]
+[OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, UNCLEAR]
 
-• OPTION_A–OPTION_D: explicit support for one of the listed options
-• OTHER_OPTION: rejects all provided options and proposes an alternative
-• UNCLEAR: cannot determine which option is preferred
+--------------------------------------------------
+3. **Open-Ended Descriptive Questions**
+(Everything NOT in Category 1 or 2.)
 
-Example:
-Q1 (choosing between four options)
+Includes:
+Q6, Q12, Q21, Q24, Q28, Q30–Q35
 
-------------------------------------------------------------
-TYPE C — YES/NO QUESTIONS
-(used for questions equivalent to “Is this appropriate?”, “Are there issues?”, etc.)
+These questions ask for:
+• issues
+• concerns
+• explanations
+• recommendations
+• examples
+• additional guidance
+• implementation considerations
 
-Allowed POSITION values:
-[YES, NO, UNCLEAR]
+Valid POSITION values:
 
-• YES: clearly affirms the proposition
-• NO: clearly rejects the proposition
-• UNCLEAR: position is mixed or cannot be determined
+[ANSWERED, NO_ADDITIONAL_GUIDANCE, UNCLEAR]
 
-Examples:
-Q30, Q31, Q32, Q33, Q34
+==================================================
+PROCESS FOR CLASSIFICATION
+==================================================
 
-------------------------------------------------------------
-TYPE D — OPEN-ENDED INFORMATIONAL QUESTIONS
-(used for questions that do NOT ask for agreement or a yes/no position,
-but ask for descriptions, suggestions, or examples)
+For each response:
 
-Allowed POSITION values:
-[RESPONSE_PROVIDED, NO_POSITION, UNCLEAR]
+1. Identify the QUESTION TYPE from the lists above.
+2. Apply the matching POSITION TYPE rules.
+3. Determine the POSITION solely from the response text.
+4. Output each result exactly as:
 
-• RESPONSE_PROVIDED: responder meaningfully answers the question
-• NO_POSITION: responder provides no substantive content
-• UNCLEAR: content is irrelevant, nonsensical, or cannot be interpreted
+response_id: <id>
+POSITION: <value>
 
-Examples:
-Q24 (“Is there additional guidance that would be helpful?”)
-Q27 (“What modifications could be made?”)
-Q28 (“What additions could be made?”)
+Repeat for all responses.
 
-------------------------------------------------------------
-OUTPUT FORMAT
-------------------------------------------------------------
+==================================================
+EXPANDED EXAMPLES (Using real responses from HoTARAC, EY, CA ANZ, PRI)
+==================================================
 
-For each response object, output:
+==================================================
+### Q1 — Multiple Option Question
+==================================================
 
-response_id: <ID>
-POSITION: <one of the allowed values>
+Question:
+"In respect of presenting the core content disclosure requirements of IFRS S1, do you prefer: (a) Option 1 – one ASRS Standard that would combine the relevant contents of IFRS S1 relating to general requirements and judgements, uncertainties and errors (i.e. all relevant requirements other than those relating to the core content that are exactly the same as the requirements in IFRS S2) within an Australian equivalent of IFRS S2; (b) Option 2 – two ASRS Standards where the same requirements in respect to disclosures of governance, strategy and risk management would be included in both Standards; (c) Option 3 – two ASRS Standards, by including in [draft] ASRS 1 the requirements relating to disclosures of governance, strategy and risk management, and in [draft] ASRS 2, replacing duplicated content with Australian-specific paragraphs cross-referencing to the corresponding paragraphs in [draft] ASRS 1 (which is the option adopted by the AASB in developing the [draft] ASRS 1 and [draft] ASRS 2 in this Exposure Draft); (d) another presentation approach (please provide details of that presentation method)? Please provide reasons to support your view."
 
-You MUST select exactly one POSITION per response.
-You MUST not return an empty POSITION.
-You MUST produce an entry for every response_id.
+Example 1 — HoTARAC:
+"HoTARAC prefers Option 2. The reason for rejecting Option 1 in BC22 is also applicable to Option 3. If in future the AASB considered further sustainability-related reporting topics and amended [draft] ASRS 1, it would also need to amend cross-referencing to [draft] ASRS 1 in [draft] ASRS 2. As such, [draft] ASRS 2 should be a standalone standard.In addition, HoTARAC does not support the replacement of ‘sustainability’ with ‘climate’ in [draft] ASRS 1. We acknowledge the complexities created by the AASB aligning with the Commonwealth’s direction to address climate-related financial disclosures first, allowing additional time to consider the reporting for other sustainability related matters. The Standard would need to be amended if the AASB progressed to include topics beyond climate. A better approach would be to limit the disclosure requirements in [draft] ASRS 1 to those topics where there is a specific topic-based standard."
+Output:
+POSITION: OPTION_2
 
-------------------------------------------------------------
-CLASSIFICATION PRIORITY
-------------------------------------------------------------
+Example 2 — EY:
+"For the reasons outlined in the cover letter, we do not support either Options 1, 2 or 3. Our preferred view is to align the wording in ASRS 1 and ASRS 2 with IFRS S1 and IFRS S2 and instead extend the ‘climate first’ transition relief in IFRS S1.E5 so that it can be applied indefinitely. A second, but less preferred, alternative would be to remove all the duplicative core content disclosure requirements from ASRS 1 so that all disclosures about climate-related risks and opportunities are co-located in ASRS 2. However, this approach would require subsequent amendments to add back those requirements when and if future sustainability topics are added to ASRS Standards."
+Output:
+POSITION: OPTION_OTHER
 
-1. Identify the QUESTION type (A, B, C, or D)
-2. Select the POSITION from the allowed label set for that type
-3. Base your classification ONLY on the stance relative to the QUESTION
-4. If the response is contradictory, vague, or non-committal → UNCLEAR
-5. For Type D questions, classify based on whether meaningful content exists
+Example 3 — CA ANZ:
+"We prefer option 2. The Government, as indicated in its Sustainable Finance Strategy, has committed to introduce internationally aligned mandatory climate-related financial reporting for large businesses and financial institutions. However, it is important to note that climate is only the first of a range of sustainability-related considerations, as evidenced by the mention of nature, water and other considerations with the Government’s Strategy. Principle 19, Strategic International Influence from the AASB due process framework for setting Australian Sustainability Reporting Standards (AASB’s due process framework) ‘is designed to support the alignment of sustainability reporting standards across jurisdictions on the basis that, to the extent feasible, international convergence is needed to minimise the costs and maximise the benefits of sustainability reporting, particularly for preparers, users and other stakeholders operating internationally.’However, the approach taken by the AASB, proposing modifications to focus on climate only in ASRS 1, significantly deviates from IFRS S1 meaning ASRS 1 is no longer internationally aligned. We are concerned that the removal of references to ‘sustainability’ in ASRS 1 narrows the standard’s scope, when compared to IFRS S1, and does not provide sufficient flexibility for future reporting in thematic areas such as nature and biodiversity as indicated in Treasury’s Sustainable Finance Strategy. It also marginalises IFRS S1’s purpose to provide a comprehensive baseline for sustainability-related considerations. Further, option 3, which has been adopted by the AASB in developing the ASRS, deviates from the IFRS Sustainability Disclosure standards and will result in difficulties to access capital and resources for international reporters. Option 1, which combines the relevant contents of IFRS S1 and S2 into an Australian equivalent IFRS S2 will require the AASB to design separate reporting standards for future sustainability thematic areas. This will create an excessive reporting burden for entities, particularly those that will need to comply with reporting obligations internationally under IFRS Sustainability Disclosure Standards. It would furthermore also deprive those reporting entities, who may not have material climate-related risks and opportunities, but may have other material sustainability-related considerations, from a reporting standard, and would require dependence on IFRS S1 in the absence of an Australian specific alternative. Therefore, we consider option 2 to be the preferred option. As already indicated, alignment with international standards is critical. We also consider it important that ASRS 1 has the flexibility and scope to be broadened to wider sustainability reporting in the future without significant amendments. In our opinion, ASRS 1 will not minimise the costs and maximise the benefits of sustainability reporting and has a narrow focus on climate-related financial information only. Further, in the approach to drafting the current ASRS 1, the AASB has taken the unusual step of deleting entire paragraphs from the international standard and replacing them with new Australian specific paragraphs that combine the requirements for for-profit and not-for-profit (NFP) entities. However, we note that the AASB, when considering the Australian applicability of IFRS accounting standards, does not modify the standards to ensure international alignment of the standards. Instead, we note the AASB add Australian specific additional disclosures and considerations for an Australian sector-neutral context to the standards or develop Australian specific standards. For example, Australian specific paragraph Aus9.1 has been added to the measurement of inventory section for a not-for-profit entity within the AASB 102 Inventories standard. This drafting approach enables Australian companies to meet international requirements under IFRS, whilst providing a sector neutral standard applicable for NFPs. We strongly recommend that this same approach should be taken for ASRS."
+Output:
+POSITION: OPTION_2
 
-------------------------------------------------------------
-ADDITIONAL CONTEXT
-------------------------------------------------------------
+Example 4 — PRI:
+"PRI does not support the three options as proposed and recommends that the priority be for AASB to consider adopting the IFRS S1 and S2 separately without making significant changes to S1 that would solely limit its scope to climate change. While Option 3, proposed by AASB, offers benefit for a very specific objective to standardize climate-related reporting, this narrow focus is not conducive to the state of sustainability reporting in today’s market and will not sufficiently answer to the data needs and expectation of investors. Entities are already expected to report on material business risks in their annual reports, with many already identifying and reporting on such risks that are sustainability related in their annual financial reports.⁸ Narrowing the scope of ASRS 1 to climate change will expose Australian entities to risk of misalignment with companies in other jurisdictions that will report on broader sustainability issues using the original IFRS S1 requirements. Global reporting requirements are already encompassing broader sustainability issues, and Australian entities can be exposed to additional costs as well if IFRS S1 is fully required in other relevant jurisdictions. Ultimately for investors that are the end-users of this information, this situation can hinder their access to comparable information that is useful to their investment decisions. Per our response to Treasury’s secondary consultation on climate-related financial disclosures, we understand that the IFRS S1 sets out the conceptual foundations for how to report on sustainability information – such as the fundamental and enhancing characteristics of quality, materiality definition, and connectivity requirements – which are needed to ensure decision-useful reporting against all other ISSB standards, including IFRS S2. Further, and importantly, IFRS S1 directs entities to disclose additional sustainability-related information to meet investors’ needs. Beyond climate change, investors need information on the broader environmental, social, and governance risks facing investee companies to inform assessments of their investments’ financial performance. Many institutional investors also now accept that, in acting in their clients’ and beneficiaries’ best financial interests, they should consider and respond to system-level risks that may affect long-term returns. With issues like biodiversity loss, human rights violations and income inequality emerging as material system-level risks,⁹ investors also need decision-useful data on their investments’ risks, opportunities, and impacts across these sustainability issues. Alongside investors, many Australian companies are already considering such sustainability-related system-level risks material and as such are disclosing their approach to managing these risks. Limiting the scope of ASRS 1 to climate change will not support such entities as they seek to meet investor demand to align their broad sustainability reporting practices with the global standard. In this regard, we recommend that the AASB: (I) should align the scope of ASRS 1 with IFRS S1 and clarify that ASRS 1 can and should be considered for entities willing to report on wider sustainability risks; and (II) acknowledges from the outset the need to bring other areas of sustainability reporting in scope should entities deem it material."
+Output:
+POSITION: OPTION_OTHER
 
-ED SR1 submissions frequently refer to:
-• alignment with IFRS S1/S2,
-• avoiding Australian-specific departures,
-• proportionality relief,
-• comparability,
-• sector-specific implications for NFP and public sector entities.
+==================================================
+### Q2 — Agreement/Disagreement Question
+==================================================
 
-These contextual themes may help you interpret whether a response
-is supporting or opposing the proposal in the QUESTION, but do not replace
-the POSITION rules above.
+Question:
+"Do you agree with the AASB’s approach to make references to its Conceptual Framework for Financial Reporting (in respect to for-profit entities) and the Framework for the Preparation and Presentation of Financial Statements (in respect to not-for-profit entities) instead of duplicating definitions and contents of those Frameworks in [draft] ASRS 1 and [draft] ASRS 2? Please provide reasons to support your view."
+
+Example 1 — HoTARAC:
+"HoTARAC agrees with the proposed approach. Even though components in those frameworks are not mandatory, they establish a point of reference."
+Output:
+POSITION: AGREEMENT
+
+Example 2 — EY:
+"We do not agree with the approach taken by the AASB. Given the ISSB does not have a conceptual framework yet, we think that the approach taken in IFRS S1 and IFRS S2 to duplicate some of the components of the Framework regarding the qualitative characteristics of useful information as requirements with which an entity must comply is not only appropriate but also beneficial for the reasons outlined below: (1) The incorporation of the qualitative characteristics of useful information directly into ASRS Standards ensures that these concepts are intrinsically applied throughout the Standards, which fosters an intuitive application of its concepts in practice. (2) This approach is consistent with the methodology adopted in Australian Accounting Standards where the concepts underpinning the Frameworks are often incorporated directly into the standards themselves. (3) Embedding the Framework's concepts within the Standards enhances clarity and accessibility. Practitioners do not need to cross-reference another document to understand the concepts underpinning the Standards’ requirements. This not only streamlines the application process but also reduces the potential for misinterpretation. In our view, there is not a compelling reason to depart from the ISSB Standards baseline in this area. Replacing these paragraphs with cross references to the AASB’s Framework also risks fostering a perception that there may be a substantive difference between the ASRS Standards and ISSB Standards in this area. We do not think that change in ASRS Standards creates a substantive difference. In our view, the fact that it does not create a substantive difference is also a reason not to depart from the ISSB Standards baseline at all."
+Output:
+POSITION: DISAGREEMENT
+
+Example 3 — CA ANZ:
+"No, we do not agree with the approach taken. As noted in BC3(c) of the ED, Australian stakeholders have indicated that international alignment should be prioritised. Referencing to the Conceptual Framework, instead of including those definitions and contents within ASRS 1 and ASRS 2, will unnecessarily deviate from the international standards. The application of the Conceptual Framework for Financial Reporting (in respect to for-profit entities) and the Framework for the Preparation and Presentation of Financial Statements (in respect to NFP entities) are voluntary. We understand this raises concerns in relation to the application of definitions and contents from these frameworks for mandatory climate-related financial disclosures. However, feedback from our members indicates international alignment to be a priority and therefore we support the retention of definitions and concepts from the Conceptual Frameworks within ASRS 1 and ASRS 2 as the most logical pathway to achieve this. In addition, non-accountants, who would be unfamiliar with the Conceptual Framework, may be involved in the preparation of ASRS disclosures. Therefore, the relevant definitions and contents from the Conceptual Frameworks should be retained within ASRS 1 and ASRS 2 to simplify the navigation across standards and frameworks."
+Output:
+POSITION: DISAGREEMENT
+
+Example 4 — PRI:
+"" (empty response)
+Output:
+POSITION: UNCLEAR
+
+==================================================
+### Q24 — Open-Ended Descriptive Question
+==================================================
+
+Question:
+"Is there additional guidance that you consider would be helpful in explaining the objective of a not-for-profit entity preparing climate-related financial disclosures? If so, please provide details of that guidance and explain why you think it would be helpful."
+
+Example 1 — HoTARAC:
+"HoTARAC members are concerned that the pressure to develop sector-neutral sustainability standards without specifically addressing a range of fundamental issues for the not-for-profit public sector increases the risk of a costly and sub-optimal implementation. Several jurisdictions hold major reservations that due process may be unintentionally neglected in the desire to achieve sector neutrality without providing sufficiently clear practical guidance or developing a cost-effective implementation path for the not-for-profit and public sector. HoTARAC observe that the question around the appropriate level(s) at which Commonwealth and State public sector sustainability reporting should occur (i.e. whole-of-state, whole-of-government, individual agencies) has not been formally considered and discussed between the AASB and the public sector, or within the public sector for that matter. The outcomes of the IPSASB and GRI projects (and their relevance to public sector reporting in Australia) are also unknown at present. Consistent with our responses in questions 26 and 27, the strategies proposed by the AASB aim to achieve sector neutrality in theory. Whilst acknowledging the efforts made by the AASB, there remains a significant concern that not-for-profit and public sector entities will bear a significant time and monetary cost impost to achieve this outcome in practice. There is also concern that sufficient practical guidance does not exist as yet to facilitate the not-for-profit sector’s transition to sustainability reporting generally. Collectively, HoTARAC members believe it is too early to conclude whether the AASB’s sustainability reporting standard setting framework has been appropriately applied when considering the potential application of these standards in the public sector context."
+Output:
+POSITION: ANSWERED
+
+Example 2 — EY:
+"In relation to the added guidance in ASRS 1.Aus6.1 and ASRS 2.Aus4.1, we think this guidance should be clarified further. As noted in paragraph BC30(c) of the ED, this guidance has been added to clarify that a NFP entity “need not undertake an exhaustive search for information to identify climate-related risks and opportunities that could reasonably be expected to affect the entity’s prospects, but is required to prepare material climate-related financial information for which reasonable and supportable information is available to the entity at the reporting date without undue cost or effort”. We agree that this is a helpful clarification for NFP entities. However, an unintended consequence of this guidance is that a for-profit entity might consider that it is unable to avail itself to the same ‘proportional’ relief even though that relief is available when the entity studies the application of ASRS 1 paragraphs B6, B8 and B10. For this reason, this NFP guidance should be rephrased to clarify that this is proportional relief that is available for all entities."
+Output:
+POSITION: ANSWERED
+
+Example 3 — CA ANZ:
+"Our members have expressed the need for guidance to support reporting entities, particularly smaller and NFP entities, on how to get started with climate-related disclosures and in complex areas, such as transition planning and scenario analysis. We propose that sector neutral ‘how to start’ guidance is developed for all reporters, with consideration given to the resource availability for entities within different sectors and of various sizes. This guidance could be shared through industry bodies and associations, including those that support the NFP sector. The AASB should also engage with the NFP sector to undertake a needs analysis to develop sector specific guidance for NFP entities."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+"" (empty)
+Output:
+POSITION: UNCLEAR
+
+==================================================
+### Q30 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"HoTARAC members are concerned that the pressure to develop sector-neutral sustainability standards without specifically addressing a range of fundamental issues for the not-for-profit public sector increases the risk of a costly and sub-optimal implementation. Several jurisdictions hold major reservations that due process may be unintentionally neglected in the desire to achieve sector neutrality without providing sufficiently clear practical guidance or developing a cost-effective implementation path for the not-for-profit and public sector. HoTARAC observe that the question around the appropriate level(s) at which Commonwealth and State public sector sustainability reporting should occur (i.e. whole-of-state, whole-of-government, individual agencies) has not been formally considered and discussed between the AASB and the public sector, or within the public sector for that matter. The outcomes of the IPSASB and GRI projects (and their relevance to public sector reporting in Australia) are also unknown at present. Consistent with our responses in questions 26 and 27, the strategies proposed by the AASB aim to achieve sector neutrality in theory. Whilst acknowledging the efforts made by the AASB, there remains a significant concern that not-for-profit and public sector entities will bear a significant time and monetary cost impost to achieve this outcome in practice. There is also concern that sufficient practical guidance does not exist as yet to facilitate the not-for-profit sector’s transition to sustainability reporting generally. Collectively, HoTARAC members believe it is too early to conclude whether the AASB’s sustainability reporting standard setting framework has been appropriately applied when considering the potential application of these standards in the public sector context."
+Output:
+POSITION: ANSWERED
+
+Example 2 — EY: 
+"As articulated in our earlier responses, we have identified some proposals whereby we consider changes or departures from the requirements in the IFRS S1 and IFRS S2 are not warranted and should be reconsidered by the AASB."
+Output:
+POSITION: NO_ADDITIONAL_GUIDANCE
+
+(Explanation: EY provides no new issues or guidance here; they only refer back to earlier content.)
+
+Example 3 — CA ANZ:
+"The AASB Sustainability Reporting Framework, in our opinion, has only been partly applied in the development of the proposals in the ED. Unnecessarily amendments have resulted in a deviation from the IFRS Sustainability Disclosure standards and indicate that paragraph 10, the prioritisation of international alignment, has not necessarily been applied. For example, the replacement of ‘sustainability’ references with ‘climate’ in ASRS 1 and the modification of paragraph 3 (IFRS S1) which has been replaced with paragraph Aus3.1 which narrows the scope to for profit entities and not-for-profit entities. As noted above, we recommend AASB adopts ‘framework neutral’ references to industry based metric disclosures in line with Aotearoa New Zealand Climate Standard 1 - Climate-related Disclosures NZ CS 1) paragraph 21. Alignment in key areas will assist the AASB in application of paragraph 13, to minimise differences in sustainability reporting standards issued in Australia and New Zealand to reduce the costs for entities that operate in both countries. Some of the modifications that have been made, such as references to the ANZSIC code and NGER scheme do not meet the criteria outlined in paragraph 20 (d) as they, in our opinion, would not meet the objectives of the IFRS sustainability Disclosure standards which focuses on international comparability of information. As noted above, we support emissions factors and data points within the NGER scheme but do not believe that the application of the methodology would be sufficient to meet international alignment. In addition, the inclusion of ANZSIC code narrows coding to Australia and New Zealand only (as noted above)."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+"The AASB Sustainability Reporting Standard-Setting Framework noted that alignment to the ISSB Standards will be prioritized, with amendments to the baseline of the ISSB Standards made only where it is necessary to do so to meet the needs of Australian stakeholders. We note however that key changes were made to the baseline IFRS S1 and S2 that do not align with this principle. These changes are the subjects of our key recommendations, including the modifications made to IFRS S1 to limit the scope to climate change, prioritization of the NGER Scheme legislation without sufficient guidance on its interoperability with the GHG Protocol, not requiring Scope 3 categorization in line with the GHG Protocol as well as additional disclosure for financed emissions by financial institutions, and eliminating the requirement to consider internationalized industry-based metrics. We recommend that AASB reconsider the modifications made to deviate from IFRS S1 and S2 in such a way that would be inconsistent to global alignment and comparability of sustainability reporting."
+Output:
+POSITION: ANSWERED
+
+You MUST choose exactly one POSITION for every response.  
+You MUST NOT leave the POSITION field blank.  
+Use only the allowed POSITION values for each question type.
+
+==================================================
+CURRENT TASK
+==================================================
 
 QUESTION: \n {question}
 RESPONSES: \n {responses}
 
-------------------------------------------------------------
-END OF SYSTEM PROMPT
-------------------------------------------------------------
+==================================================
+
+Return only classifications following the exact output format specified above.

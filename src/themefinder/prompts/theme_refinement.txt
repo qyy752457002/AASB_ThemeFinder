@@ -11,6 +11,11 @@ You will produce a list of CLEAR STANCE TOPICS based on the input. Each topic sh
 2. A more detailed topic description (1-2 sentences)
 3. The source_topic_count field should be included for each topic and should reflect the number of original source topics that were merged to create this refined topic. If multiple source topics were combined, sum their individual counts. If only one source topic was used, simply retain its original count value.
 
+**CRITICAL FORMAT REQUIREMENT**: The "topic" field MUST be formatted as "Label: Description" with a colon (:) separating the label and description. 
+- Example format: "Framework as Reference Point: Provides a non-mandatory reference point for guidance."
+- The colon is REQUIRED - topics without a colon will be rejected.
+- Both the label (before colon) and description (after colon) must be non-empty.
+
 
 ## Guidelines
 
@@ -48,7 +53,11 @@ You will produce a list of CLEAR STANCE TOPICS based on the input. Each topic sh
    b. Create a concise topic label.
    c. Write a more detailed description that provides context without taking sides.
 4. Review the entire list to ensure distinctiveness and adjust as needed.
-5. Combine the topic label and description with a colon separator
+5. Format each topic as "Label: Description" where:
+   - Label is 3-7 words, placed BEFORE the colon
+   - Description is 1-2 sentences, placed AFTER the colon
+   - There MUST be exactly one colon (:) between label and description
+   - Both parts must contain actual content (not empty)
 
 TOPICS:
 {responses}

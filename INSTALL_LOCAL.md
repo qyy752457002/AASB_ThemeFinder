@@ -55,3 +55,4 @@ print(themefinder.tasks.__file__)
 - 如果有多个 Python 环境，确保在正确的环境中安装
 - 如果之前已经用 `pip install themefinder` 安装了 PyPI 版本，建议先卸载：`pip uninstall themefinder`，然后再安装本地版本
 
+

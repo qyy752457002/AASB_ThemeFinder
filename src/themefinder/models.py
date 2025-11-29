@@ -3,40 +3,32 @@ from enum import Enum
 from pydantic import BaseModel, Field, model_validator
 class Position(str, Enum):
     """
-    All valid POSITION values across sentiment prompt question types (A–D),
+    All valid POSITION values across sentiment prompt question types,
     aligned with `prompts/sentiment_analysis.txt`.
+
+    Mapping to prompt sections:
+    1. Standard Agree/Disagree Questions       → AGREEMENT, DISAGREEMENT, UNCLEAR
+       (Q2, Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q11, Q13–Q20, Q22, Q23, Q25, Q26, Q27, Q29)
+    2. Multiple-Option Selection Questions     → OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, UNCLEAR
+       (Q1 only)
+    3. Open-Ended Descriptive Questions        → ANSWERED, NO_ADDITIONAL_GUIDANCE, UNCLEAR
+       (Q6, Q12, Q21, Q24, Q28, Q30–Q35)
     """
 
-    # Type A — Agreement questions
+    # 1. Standard Agree/Disagree Questions
     AGREEMENT = "AGREEMENT"
     DISAGREEMENT = "DISAGREEMENT"
     UNCLEAR = "UNCLEAR"
 
-    # Type B — Multiple-choice questions (lettered options)
-    OPTION_A = "OPTION_A"
-    OPTION_B = "OPTION_B"
-    OPTION_C = "OPTION_C"
-    OPTION_D = "OPTION_D"
-    OTHER_OPTION = "OTHER_OPTION"
+    # 2. Multiple-Option Selection Questions (Q1 only)
+    OPTION_1 = "OPTION_1"
+    OPTION_2 = "OPTION_2"
+    OPTION_3 = "OPTION_3"
+    OPTION_OTHER = "OPTION_OTHER"
 
-    # Type B — Multiple-choice questions (roman numeral options)
-    OPTION_I = "OPTION_I"
-    OPTION_II = "OPTION_II"
-    OPTION_III = "OPTION_III"
-    OPTION_IV = "OPTION_IV"
-    OPTION_V = "OPTION_V"
-
-    # Type C — Yes/No questions
-    YES = "YES"
-    NO = "NO"
-
-    # Type D — Open-ended informational questions
-    RESPONSE_PROVIDED = "RESPONSE_PROVIDED"
-    NO_POSITION = "NO_POSITION"
-
-    # Backwards-compatible alias (legacy name used in earlier prompts/code)
-    ANSWER_PROVIDED = "RESPONSE_PROVIDED"
-
+    # 3. Open-Ended Descriptive Questions (Q6, Q12, Q21, Q24, Q28, Q30–Q35)
+    ANSWERED = "ANSWERED"
+    NO_ADDITIONAL_GUIDANCE = "NO_ADDITIONAL_GUIDANCE"
 class Stance(str, Enum):
     """Enum for valid stance values"""
 
@@ -191,7 +183,7 @@ class Theme(ValidatedModel):
     )
     position: Position = Field(
         ...,
-        description="SENTIMENT ABOUT THIS TOPIC",
+        description="SENTIMENT ABOUT THIS TOPIC (AGREEMENT, DISAGREEMENT, OR UNCLEAR)",
     )
 
 
