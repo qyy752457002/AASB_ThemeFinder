@@ -1,144 +1,125 @@
 {system_prompt}
 
-You will receive:
+You will receive a QUESTION from the AASB Exposure Draft ED SR1 consultation
+and a list of RESPONSES, each containing a response_id and a response.
 
-1. A **QUESTION** drawn from the AASB ED SR1 list (Q1–Q35).
-2. A list of **RESPONSES**, each containing a `response_id` and a `response` text.
+Your task is to analyze each response and determine the responder’s POSITION
+relative to the QUESTION. Because ED SR1 questions vary in structure,
+you must choose the POSITION from the correct label set depending on the type
+of QUESTION being asked.
 
-Your task is to analyze each response and assign an appropriate **POSITION** based on the type of QUESTION being asked.
+You MUST include every response_id in your output.
+You MUST NOT leave POSITION empty.
+When a response cannot be meaningfully labelled, return UNCLEAR or the
+appropriate fallback label, but an entry MUST be returned for each response_id.
 
-Different questions require different POSITION categories. You must determine the correct category according to the question type described below.
+------------------------------------------------------------
+QUESTION TYPE LOGIC
+------------------------------------------------------------
 
----
+Different ED SR1 questions require different POSITION label sets.
+Before labeling, determine which question type the QUESTION belongs to.
 
-# **1. Determine the Question Type**
+------------------------------------------------------------
+TYPE A — AGREEMENT QUESTIONS
+(used for questions that ask “Do you agree...?”, “Do you support...?”, etc.)
 
-Before evaluating the responses, classify the QUESTION into one of the following types:
+Allowed POSITION values:
+[AGREEMENT, DISAGREEMENT, UNCLEAR]
 
-### **Type A — Agreement Questions**
-
-These questions ask whether the respondent *agrees with a proposal*.
-Examples: Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12–Q23, Q25, Q26, Q29.
-
-**POSITION options:**
-
-* `AGREEMENT`
-* `DISAGREEMENT`
-* `UNCLEAR`
-
----
-
-### **Type B — Option-Selection Questions**
-
-These questions require choosing from multiple options.
-
-Examples:
-
-* **Q1** (Options a, b, c, d)
-* **Q28** (Options i, ii, iii, iv, v)
-
-**POSITION options:**
-
-* For Q1: `a`, `b`, `c`, `d`, or `UNCLEAR`
-* For Q28: `I`, `II`, `III`, `IV`, `V`, or `UNCLEAR`
-
-If the response clearly prefers one option (even implicitly), choose the corresponding letter.
-If multiple options are mentioned but no preference is expressed, choose `UNCLEAR`.
-
----
-
-### **Type C — Yes/No Questions**
+• AGREEMENT: clearly supports the proposal in the question
+• DISAGREEMENT: clearly opposes the proposal in the question
+• UNCLEAR: ambiguous, mixed, or insufficient information
 
 Examples:
+Q2, Q3, Q4, Q5 … (most Q2–Q23, Q25–Q29)
 
-* **Q30–Q34**
-  These questions ask whether the proposal is appropriate, creates issues, is useful, etc.
+------------------------------------------------------------
+TYPE B — MULTIPLE-CHOICE QUESTIONS
+(used when the question asks the responder to choose between Option (a), (b), (c), (d))
 
-**POSITION options:**
+Allowed POSITION values:
+[OPTION_A, OPTION_B, OPTION_C, OPTION_D, OTHER_OPTION, UNCLEAR]
 
-* `YES`
-* `NO`
-* `UNCLEAR`
+• OPTION_A–OPTION_D: explicit support for one of the listed options
+• OTHER_OPTION: rejects all provided options and proposes an alternative
+• UNCLEAR: cannot determine which option is preferred
 
-Interpret supportive or positive wording as **YES**; opposing or negative wording as **NO**.
+Example:
+Q1 (choosing between four options)
 
----
+------------------------------------------------------------
+TYPE C — YES/NO QUESTIONS
+(used for questions equivalent to “Is this appropriate?”, “Are there issues?”, etc.)
 
-### **Type D — Open-Ended Questions**
+Allowed POSITION values:
+[YES, NO, UNCLEAR]
 
-These questions do not express agreement/choice and instead ask for explanations, details, or suggestions.
+• YES: clearly affirms the proposition
+• NO: clearly rejects the proposition
+• UNCLEAR: position is mixed or cannot be determined
 
 Examples:
+Q30, Q31, Q32, Q33, Q34
 
-* Q24
-* Q27
-* Q31 (if purely descriptive)
-* Q35
+------------------------------------------------------------
+TYPE D — OPEN-ENDED INFORMATIONAL QUESTIONS
+(used for questions that do NOT ask for agreement or a yes/no position,
+but ask for descriptions, suggestions, or examples)
 
-**POSITION options:**
+Allowed POSITION values:
+[RESPONSE_PROVIDED, NO_POSITION, UNCLEAR]
 
-* `ANSWER_PROVIDED`
-* `UNCLEAR`
+• RESPONSE_PROVIDED: responder meaningfully answers the question
+• NO_POSITION: responder provides no substantive content
+• UNCLEAR: content is irrelevant, nonsensical, or cannot be interpreted
 
-If the response meaningfully answers the question → `ANSWER_PROVIDED`.
-If the response is irrelevant, contradictory, or non-responsive → `UNCLEAR`.
+Examples:
+Q24 (“Is there additional guidance that would be helpful?”)
+Q27 (“What modifications could be made?”)
+Q28 (“What additions could be made?”)
 
----
+------------------------------------------------------------
+OUTPUT FORMAT
+------------------------------------------------------------
 
-# **2. Output Requirements**
+For each response object, output:
 
-For **every** response object you MUST:
-
-* Return an entry with the **correct `response_id`**
-* Include a **POSITION** using the **correct category** based on the question type
-* Never leave POSITION empty
-
-Do **not** invent content.
-Do **not** reinterpret the QUESTION.
-Judge only what is explicitly written in the response.
-
----
-
-# **3. Output Format**
-
-For each response:
-
-```
 response_id: <ID>
 POSITION: <one of the allowed values>
-```
 
-If multiple responses are passed, output them sequentially.
+You MUST select exactly one POSITION per response.
+You MUST not return an empty POSITION.
+You MUST produce an entry for every response_id.
 
----
+------------------------------------------------------------
+CLASSIFICATION PRIORITY
+------------------------------------------------------------
 
-# **4. Examples**
+1. Identify the QUESTION type (A, B, C, or D)
+2. Select the POSITION from the allowed label set for that type
+3. Base your classification ONLY on the stance relative to the QUESTION
+4. If the response is contradictory, vague, or non-committal → UNCLEAR
+5. For Type D questions, classify based on whether meaningful content exists
 
-### **Example 1 — Agreement-type question**
+------------------------------------------------------------
+ADDITIONAL CONTEXT
+------------------------------------------------------------
 
-Response: "We support the changes and believe they improve clarity."
-→ POSITION: AGREEMENT
+ED SR1 submissions frequently refer to:
+• alignment with IFRS S1/S2,
+• avoiding Australian-specific departures,
+• proportionality relief,
+• comparability,
+• sector-specific implications for NFP and public sector entities.
 
----
-
-### **Example 2 — Option-Selection question (Q1)**
-
-Response: "We prefer aligning with IFRS S1 but do not support Options 1–3."
-→ POSITION: d (if option (d) = another approach)
-
----
-
-### **Example 3 — Yes/No question**
-
-Response: "Some parts work, but overall the framework has issues."
-→ POSITION: NO
-
----
-
-### **Example 4 — Open-ended question (Q24)**
-
-Response: "Additional guidance is needed regarding value-chain boundaries."
-→ POSITION: ANSWER_PROVIDED
+These contextual themes may help you interpret whether a response
+is supporting or opposing the proposal in the QUESTION, but do not replace
+the POSITION rules above.
 
 QUESTION: \n {question}
 RESPONSES: \n {responses}
+
+------------------------------------------------------------
+END OF SYSTEM PROMPT
+------------------------------------------------------------
