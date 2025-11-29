@@ -2,30 +2,40 @@ from typing import List, Optional
 from enum import Enum
 from pydantic import BaseModel, Field, model_validator
 class Position(str, Enum):
-    """All valid POSITION values across sentiment prompt question types."""
+    """
+    All valid POSITION values across sentiment prompt question types (A–D),
+    aligned with `prompts/sentiment_analysis.txt`.
+    """
 
-    # Type A – Agreement questions
+    # Type A — Agreement questions
     AGREEMENT = "AGREEMENT"
     DISAGREEMENT = "DISAGREEMENT"
     UNCLEAR = "UNCLEAR"
 
-    # Type B – Option-selection questions (Q1, Q28)
-    OPTION_A = "a"
-    OPTION_B = "b"
-    OPTION_C = "c"
-    OPTION_D = "d"
-    OPTION_I = "I"
-    OPTION_II = "II"
-    OPTION_III = "III"
-    OPTION_IV = "IV"
-    OPTION_V = "V"
+    # Type B — Multiple-choice questions (lettered options)
+    OPTION_A = "OPTION_A"
+    OPTION_B = "OPTION_B"
+    OPTION_C = "OPTION_C"
+    OPTION_D = "OPTION_D"
+    OTHER_OPTION = "OTHER_OPTION"
 
-    # Type C – Yes/No questions (Q30–Q34)
+    # Type B — Multiple-choice questions (roman numeral options)
+    OPTION_I = "OPTION_I"
+    OPTION_II = "OPTION_II"
+    OPTION_III = "OPTION_III"
+    OPTION_IV = "OPTION_IV"
+    OPTION_V = "OPTION_V"
+
+    # Type C — Yes/No questions
     YES = "YES"
     NO = "NO"
 
-    # Type D – Open-ended questions (Q24, Q27, Q31, Q35)
-    ANSWER_PROVIDED = "ANSWER_PROVIDED"
+    # Type D — Open-ended informational questions
+    RESPONSE_PROVIDED = "RESPONSE_PROVIDED"
+    NO_POSITION = "NO_POSITION"
+
+    # Backwards-compatible alias (legacy name used in earlier prompts/code)
+    ANSWER_PROVIDED = "RESPONSE_PROVIDED"
 
 class Stance(str, Enum):
     """Enum for valid stance values"""
