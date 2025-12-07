@@ -64,18 +64,9 @@ class TestTheme:
         theme = Theme(
             topic_label="Healthcare",
             topic_description="Access to affordable healthcare services",
-            position=Position.AGREEMENT,
         )
         assert theme.topic_label == "Healthcare"
-        assert theme.position == Position.AGREEMENT
-
-    def test_invalid_position(self):
-        with pytest.raises(ValidationError):
-            Theme(
-                topic_label="Healthcare",
-                topic_description="Access to affordable healthcare services",
-                position="AGREE",
-            )
+        assert theme.topic_description == "Access to affordable healthcare services"
 
 
 class TestSentimentAnalysisOutput:
@@ -101,12 +92,10 @@ class TestThemeGenerationResponses:
                 Theme(
                     topic_label="Healthcare",
                     topic_description="Access to affordable healthcare services",
-                    position=Position.AGREEMENT,
                 ),
                 Theme(
                     topic_label="Education",
                     topic_description="Quality of public education system",
-                    position=Position.DISAGREEMENT,
                 ),
             ]
         )
@@ -119,12 +108,10 @@ class TestThemeGenerationResponses:
                     Theme(
                         topic_label="Healthcare",
                         topic_description="Description 1",
-                        position=Position.AGREEMENT,
                     ),
                     Theme(
                         topic_label="healthcare",
                         topic_description="Description 2",
-                        position=Position.DISAGREEMENT,
                     ),
                 ]
             )

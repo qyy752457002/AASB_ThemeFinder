@@ -1,37 +1,154 @@
 {system_prompt}
 
-Your job is to help identify which topics come up in free_text_responses to a question.
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-You will be given:
-    - a QUESTION that has been asked
-    - a TOPIC LIST of topics that are known to be present in free_text_responses to this question. These will be structured as follows:
-        {{'topic_id': 'topic_description}}
-    - a list of FREE_TEXT_RESPONSES to the question. These will be structured as follows:
-        {{'response_id': 'free text response'}}
+This stage is THEME MAPPING.
+All themes provided to you have already been:
+• generated,
+• condensed,
+• refined into stable definitions, and
+• (optionally) aligned to high-level policy themes.
 
-Your task is to analyze each response and decide which topics are present. Guidelines:
-    - You can only assign to a response to a topic in the provided TOPIC LIST
-    - A response doesn't need to exactly match the language used in the TOPIC LIST, it should be considered a match if it expresses a similar sentiment.
-    - You must use the alphabetic 'topic_id' to indicate which topic you have assigned. Do not use the full topic description
-    - Each response can be assigned to multiple topics if it matches more than one topic from the TOPIC LIST.
-    - Each topic can only be assigned once per response, if the topic is mentioned more than once use the first mention for reasoning and stance.
-    - There is no limit on how many topics can be assigned to a response.
-    - **IMPORTANT**: If a response is empty, blank, or cannot be matched to any topic, you MUST assign ["UNCLEAR"] to the labels field. The labels list must NEVER be empty.
+Your role here is purely CLASSIFICATION.
 
-You MUST include every response ID in the output.
-If the response can not be labelled or is empty, you MUST still return an entry with the correct response ID.
-**CRITICAL**: The "labels" field must NEVER be an empty list. If a response cannot be matched to any topic, use ["UNCLEAR"] as a default label.
-You must only return the alphabetic topic_ids in the labels section. For unmatched responses, use ["UNCLEAR"].
+==================================================
+TASK OBJECTIVE
+==================================================
 
+Given:
+• ONE consultation QUESTION
+• A list of FINAL THEMES relevant to that question
+• A list of FREE-TEXT RESPONSES submitted by organisations
+
+Your task is to determine, for EACH response, which themes are
+SUBSTANTIVELY ADDRESSED in the response text.
+
+This step creates the link between:
+• individual responses
+• final themes
+for later aggregation and analysis.
+
+==================================================
+INPUT STRUCTURE
+==================================================
+
+You will receive:
 
 QUESTION:
-
 {question}
 
-TOPIC LIST:
+FINAL THEME LIST:
+Themes are provided as a dictionary:
+{{
+  "theme_id": "theme_label: theme_description"
+}}
 
+FREE TEXT RESPONSES:
+Responses are provided as:
+{{
+  "response_id": "free text response"
+}}
+
+==================================================
+MAPPING RULES
+==================================================
+
+For each response:
+
+1. Assign ALL themes that are clearly and substantively present.
+   • A theme is present if the response discusses the issue described,
+     even using different wording.
+   • Exact wording matches are NOT required.
+
+2. A single response MAY map to multiple themes.
+
+3. Each theme_id may be used AT MOST once per response.
+
+4. Do NOT infer themes that are only weakly implied.
+   • If the theme is not clearly grounded in the text, do not assign it.
+
+5. Mapping is THEMATIC, not SENTIMENT-BASED.
+   • Do NOT consider whether the response agrees or disagrees.
+   • Sentiment has already been classified elsewhere.
+
+==================================================
+HANDLING EMPTY OR NON-SUBSTANTIVE RESPONSES
+==================================================
+
+If a response is:
+• empty,
+• blank,
+• purely procedural,
+• or does not substantively address any provided theme,
+
+YOU MUST assign:
+["UNCLEAR"]
+
+The labels array MUST NEVER be empty.
+
+==================================================
+OUTPUT FORMAT (MANDATORY)
+==================================================
+
+You MUST return an entry for EVERY response_id.
+
+The output format for EACH response must be exactly:
+
+{{
+  "response_id": "<id>",
+  "labels": ["<theme_id_1>", "<theme_id_2>", ...]
+}}
+
+Rules:
+• labels must contain at least ONE value
+• use ONLY the provided theme_ids
+• do NOT include theme descriptions in output
+• if no themes apply, use: ["UNCLEAR"]
+
+==================================================
+QUALITY AND CONSISTENCY REQUIREMENTS
+==================================================
+
+✔ Be consistent across responses
+✔ Prefer under-tagging to speculative over-tagging
+✔ Apply the same standard across all organisations
+✔ Avoid bias or interpretation beyond the text
+
+==================================================
+EXAMPLE (ILLUSTRATIVE ONLY)
+==================================================
+
+FINAL THEMES:
+{{
+  "T1": "Proportionality of compliance costs: The potential for climate-related
+         disclosure requirements to impose disproportionate costs on smaller entities.",
+  "T2": "International alignment with IFRS: Issues concerning consistency with
+         IFRS S1 and IFRS S2 requirements."
+}}
+
+RESPONSES:
+{{
+  "R1": "We are concerned that smaller not-for-profit entities would face
+         significant implementation costs.",
+  "R2": ""
+}}
+
+OUTPUT:
+[
+  {{ "response_id": "R1", "labels": ["T1"] }},
+  {{ "response_id": "R2", "labels": ["UNCLEAR"] }}
+]
+
+==================================================
+CURRENT TASK
+==================================================
+
+QUESTION:
+{question}
+
+FINAL THEME LIST:
 {refined_themes}
 
-FREE_TEXT_RESPONSES:
-
+FREE TEXT RESPONSES:
 {responses}
+

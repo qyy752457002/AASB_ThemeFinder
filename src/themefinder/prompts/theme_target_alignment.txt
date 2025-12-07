@@ -1,18 +1,129 @@
 {system_prompt}
-Input: You will receive a JSON array of themes, where each theme contains a description of a topic or concept.
 
-Goal: Consolidate these themes into approximately {target_n_themes} distinct categories by:
-1. Identifying and combining similar or overlapping themes
-2. Preserving all significant details and perspectives
-3. Creating clear, comprehensive descriptions for each merged theme
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-Requirements:
-- Each consolidated theme should capture all relevant information from its source themes
-- Final descriptions should be concise but thorough
-- The merged themes should be distinct from each other with minimal overlap
-- The source_topic_count field should be included for each theme and represent the sum of all source themes that were combined to create it
-- You cannot return more than {target_n_themes}
+This stage is THEME TARGET ALIGNMENT.
+All themes provided to you have already been:
+• generated,
+• condensed, and
+• refined into stable, neutral, policy-ready themes.
 
+Your task here is NOT thematic discovery.
+Your task is to align the refined themes to a
+TARGET NUMBER OF HIGH-LEVEL POLICY THEMES
+for reporting, briefing, and decision-making purposes.
 
-Themes to analyze: 
+==================================================
+TASK OBJECTIVE
+==================================================
+
+Given:
+• A list of FINAL REFINED THEMES
+• A target number of themes: {target_n_themes}
+
+Your task is to:
+
+1. Group refined themes into a limited number of
+   HIGH-LEVEL POLICY CATEGORIES
+2. Ensure each final category represents a
+   distinct policy consideration area
+3. Preserve all substantive content from the source themes
+4. Produce a theme set that is:
+   – suitable for AASB consultation summaries
+   – suitable for Treasury or Ministerial briefings
+   – stable enough for cross-question comparison
+
+This is a CONTROLLED REDUCTION step focused on policy usability.
+
+==================================================
+ALIGNMENT PRINCIPLES
+==================================================
+
+When aligning themes, prioritise:
+
+• Policy action similarity  
+  – Would the same regulatory, drafting, or guidance response
+    address these themes?
+
+• Conceptual hierarchy  
+  – Lower-level technical issues may roll up into a
+    higher-level policy concern (e.g. data, cost, alignment).
+
+• Cross-question applicability  
+  – Prefer alignments that remain meaningful across
+    multiple consultation questions.
+
+Do NOT align themes solely because they sound similar.
+Alignment must make sense at a policy decision level.
+
+==================================================
+WHAT MUST BE PRESERVED
+==================================================
+
+For each aligned theme, you MUST retain:
+
+• All key concepts from the source themes
+• Regulatory context (e.g. IFRS alignment, NFP impact, assurance, implementation)
+• The cumulative source_topic_count as a signal of prominence
+
+No substantive issue raised in the input may be lost.
+
+==================================================
+OUTPUT FORMAT (MANDATORY)
+==================================================
+
+You MUST return AT MOST {target_n_themes} themes.
+
+For EACH aligned theme, output:
+
+• theme_label  
+  – High-level, policy-facing
+  – 3–6 words
+  – Broad enough to cover multiple refined themes
+
+• theme_description  
+  – 2–3 sentences
+  – Synthesises all underlying issues clearly
+  – Written in neutral, regulatory language
+
+• source_topic_count  
+  – Sum of source_topic_count from all merged refined themes
+  – Represents issue salience, not number of respondents
+
+==================================================
+PROHIBITIONS
+==================================================
+
+✘ Do NOT:
+• introduce new issues
+• restate or quote individual refined themes verbatim
+• introduce sentiment or POSITION
+• exceed the target number of themes
+• collapse themes so far that policy meaning is diluted
+
+==================================================
+EXAMPLE (ILLUSTRATIVE ONLY)
+==================================================
+
+INPUT REFINED THEMES:
+• Proportionality of compliance costs
+• Resource constraints for smaller entities
+• Scalability of disclosure requirements
+
+ALIGNED OUTPUT:
+• theme_label: Cost, scalability and proportionality
+  theme_description: Issues relating to the cost of compliance,
+  scalability of disclosure requirements, and the ability of
+  smaller or less-resourced entities to implement climate-related
+  financial reporting requirements proportionately and effectively.
+  source_topic_count: 7
+
+==================================================
+CURRENT TASK
+==================================================
+
+TARGET NUMBER OF THEMES:
+{target_n_themes}
+
+REFINED THEMES:
 {responses}

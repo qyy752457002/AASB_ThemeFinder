@@ -181,10 +181,6 @@ class Theme(ValidatedModel):
     topic_description: str = Field(
         ..., description="More detailed description of the topic in 1-2 sentences"
     )
-    position: Position = Field(
-        ...,
-        description="SENTIMENT ABOUT THIS TOPIC (AGREEMENT, DISAGREEMENT, OR UNCLEAR)",
-    )
 
 
 class ThemeGenerationResponses(ValidatedModel):

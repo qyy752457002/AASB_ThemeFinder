@@ -1,63 +1,121 @@
 {system_prompt}
 
-You are tasked with refining a list of topics generated from responses to a question. 
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-## Input
-You will receive a list of TOPICS. These topics explicitly tie opinions to whether a person agrees or disagrees with the question.
+This stage is THEME REFINEMENT.
+Themes have already been generated and condensed in earlier stages.
+Your task here is to STANDARDISE and FINALISE themes so they can be used
+consistently for mapping individual responses and for policy analysis.
 
-## Output
-You will produce a list of CLEAR STANCE TOPICS based on the input. Each topic should have four parts:
-1. A brief, clear topic label (3-7 words)
-2. A more detailed topic description (1-2 sentences)
-3. The source_topic_count field should be included for each topic and should reflect the number of original source topics that were merged to create this refined topic. If multiple source topics were combined, sum their individual counts. If only one source topic was used, simply retain its original count value.
+This stage produces the FINAL THEME SET.
 
-**CRITICAL FORMAT REQUIREMENT**: The "topic" field MUST be formatted as "Label: Description" with a colon (:) separating the label and description. 
-- Example format: "Framework as Reference Point: Provides a non-mandatory reference point for guidance."
-- The colon is REQUIRED - topics without a colon will be rejected.
-- Both the label (before colon) and description (after colon) must be non-empty.
+==================================================
+TASK OBJECTIVE
+==================================================
 
+Given:
+• A list of CONDENSED THEMES
+  (each with topic_label, topic_description, and source_topic_count)
 
-## Guidelines
+Your task is to refine these into a set of:
+• clear
+• unambiguous
+• policy-neutral
+• consistently worded
+FINAL THEMES.
 
-1. Information Retention:
-   - Preserve all key information, details and concepts from the original topics.
-   - Ensure no significant details are lost in the refinement process.
+These themes represent WHAT the issue is,
+not WHETHER respondents support or oppose it.
 
-2. Clear Stance Formulation:
-   - Reformulate topics to express a clear stance that can be agreed or disagreed with.
-   - Use direct language like "Increased risk of X" rather than "X"
-   - Avoid double negatives and ambiguous phrasing.
-   - Phrase topics as definitive statements.
+==================================================
+CRITICAL DESIGN PRINCIPLES
+==================================================
 
-3. Avoid Response References:
-   - Do not use language that refers to multiple responses or respondents.
-   - Focus solely on the content of each topic.
-   - Avoid phrases like "many respondents said" or "some responses indicated".
+1. Stance-Neutrality
+   • Do NOT embed agreement or disagreement into the theme
+   • Themes must be usable regardless of sentiment
+   • Sentiment is handled separately in sentiment_analysis and mapping
 
-4. Distinctiveness:
-   - Ensure each topic represents a unique concept or aspect of the policy.
-   - Minimize overlap between topics.
-   - If topics are closely related, find ways to differentiate them clearly.
+2. Policy Actionability
+   • A policymaker should immediately understand:
+     – what issue is raised
+     – which part of the standard it relates to
+   • Themes should correspond to potential drafting, guidance, or implementation decisions
 
-5. Fluency and Readability:
-   - Create concise, clear topic labels that summarize the main idea.
-   - Provide detailed descriptions that expand on the label without mere repetition.
-   - Use proper grammar, punctuation, and natural language.
+3. Semantic Stability
+   • Themes should be robust enough to apply across:
+     – multiple questions
+     – multiple respondent types
+     – multiple reporting periods
 
-## Process
+==================================================
+OUTPUT FORMAT (MANDATORY)
+==================================================
 
-1. Analyze the TOPICS to identify key themes and information.
-2. Group closely related topics together.
-3. For each group or individual topic:
-   a. Distill the core concept, removing any bias or opinion.
-   b. Create a concise topic label.
-   c. Write a more detailed description that provides context without taking sides.
-4. Review the entire list to ensure distinctiveness and adjust as needed.
-5. Format each topic as "Label: Description" where:
-   - Label is 3-7 words, placed BEFORE the colon
-   - Description is 1-2 sentences, placed AFTER the colon
-   - There MUST be exactly one colon (:) between label and description
-   - Both parts must contain actual content (not empty)
+For EACH refined theme, output:
+
+• topic  
+  – MUST be formatted exactly as:
+    "Label: Description"
+
+  – Label:
+    * 3–7 words
+    * Neutral, technical phrasing
+    * No emotive or evaluative language
+
+  – Description:
+    * 1–2 sentences
+    * Precise and specific
+    * Describes the issue, concern, or consideration clearly
+    * Does NOT state whether it is good or bad
+
+• source_topic_count  
+  – Retain the aggregated count from the condensation stage
+  – Represents signal strength, not respondent count
+
+***STRICT FORMAT RULES***
+• There MUST be exactly ONE colon (:)
+• Both label and description must be non-empty
+• Topics without a colon will be rejected
+
+==================================================
+REFINEMENT GUIDELINES
+==================================================
+
+✔ DO:
+• Improve clarity and consistency of wording
+• Resolve vague or overlapping labels
+• Align terminology with:
+  – AASB
+  – IFRS S1 / IFRS S2
+  – Australian regulatory context (e.g. NGER, GPFR, ASRS)
+
+✘ DO NOT:
+• Introduce new themes
+• Remove substantively distinct themes
+• Reference respondents, submissions, or views
+• Use words like “support”, “oppose”, “agree”, “disagree”
+• Rephrase themes as arguments or recommendations
+
+==================================================
+EXAMPLE (ILLUSTRATIVE ONLY)
+==================================================
+
+INPUT THEME:
+• topic_label: Cost and proportionality concerns
+  topic_description: Respondents raise concerns that compliance costs may be
+  disproportionate for smaller or less-resourced entities.
+  source_topic_count: 6
+
+REFINED OUTPUT:
+• topic: Proportionality of compliance costs: The potential for climate-related
+  disclosure requirements to impose disproportionate compliance costs on
+  smaller or less-resourced reporting entities.
+  source_topic_count: 6
+
+==================================================
+CURRENT TASK
+==================================================
 
 TOPICS:
 {responses}

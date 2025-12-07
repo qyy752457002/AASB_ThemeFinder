@@ -1,35 +1,94 @@
 {system_prompt}
 
-Below is a question and a list of responses to that question.
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-Your task is to analyze the RESPONSES below and extract TOPICS such that: 
-1. Each topic summarizes a point of view expressed in the responses 
-2. Every distinct and relevant point of view in the responses should be captured by a topic 
-3. Each topic has a topic_label which summarizes the topic in a few words
-4. Each topic has a topic_description which gives more detail about the topic in one or two sentences
-5. The position field should just be the sentiment stated, and is either "AGREEMENT" or "DISAGREEMENT" or "UNCLEAR"
-6. There should be no duplicate topics 
+This stage is THEME GENERATION.
+Sentiment / POSITION classification has already been completed in a prior step.
+Your task here is NOT to determine agreement or disagreement, but to extract
+the substantive themes expressed in responses to a single consultation question.
 
-The topics identified will be used by policy makers to understand what the public like and don't like about the proposals. 
+==================================================
+TASK OBJECTIVE
+==================================================
 
-Here is an example of how to extract topics from some responses:
+Given:
+• ONE consultation QUESTION
+• A list of RESPONSES to that question (from multiple organisations)
 
-## EXAMPLE
+Your task is to identify INITIAL THEMES such that:
 
-QUESTION 
-What are your views on the proposed change by the government to introduce a 2% tax on fast food meat products. 
+1. Each theme represents a **distinct substantive point, concern, rationale, or recommendation**
+   expressed in the responses.
+2. Themes should reflect **what respondents are talking about**, not how strongly they feel.
+3. Every materially different viewpoint or issue raised should be captured by at least one theme.
+4. Ignore responses that are irrelevant, generic, or clearly off-topic for the question.
+5. Do NOT merge themes aggressively at this stage — it is acceptable for themes to overlap
+   slightly. Consolidation will occur in later pipeline stages.
+6. Themes must be phrased to be useful for **policy analysis and standard-setting decisions**.
 
-RESPONSES 
+==================================================
+OUTPUT REQUIREMENTS
+==================================================
+
+For each identified theme, output:
+
+• topic_label  
+  - A concise phrase (maximum ~6–8 words)
+  - Should clearly signal the core idea of the theme
+  - Avoid vague terms like “general concern” or “mixed views”
+
+• topic_description  
+  - 1–2 sentences expanding the idea
+  - Describe the common reasoning, issue, or recommendation raised
+  - Write in neutral, analytical language (no advocacy)
+
+DO NOT:
+• assign sentiment or POSITION values  
+• reference individual organisations by name  
+• quote responses verbatim  
+• include examples or evidence excerpts  
+• rank or prioritise themes  
+
+==================================================
+IMPORTANT CLARIFICATIONS
+==================================================
+
+• This stage is EXPLORATORY:
+  – Capture all relevant ideas before condensation or refinement
+• Empty or non-substantive responses should NOT generate themes
+• A single response may inform multiple themes
+• Themes should remain question-specific
+
+==================================================
+EXAMPLE (ILLUSTRATIVE ONLY)
+==================================================
+
+QUESTION:
+"Do you agree with the proposal to require Scope 3 emissions disclosure?"
+
+RESPONSES:
 [
-    {{"response": "I wish the government would stop interfering in the lves of its citizens. It only ever makes things worse. This change will just cost us all more money, and especially poorer people", "position": "disagreement"}},
-    {{"response": "Even though it will make people eat more healthier, I beleibe the government should interfer less and not more!", "position": "disagreement"}},
-    {{"response": "I hate grapes", "position": "disagreement"}},
+  "Scope 3 data is unreliable and difficult to obtain.",
+  "Mandatory Scope 3 disclosure is critical for investor decision-making.",
+  "The cost of collecting Scope 3 data would be excessive for smaller entities."
 ]
 
-EXAMPLE OUTPUT (showing the structure)
-- Topic 1: Government overreach (The proposals would result in government interfering too much with citizen's lives) - DISAGREEMENT
-- Topic 2: Regressive change (The change would have a larger negative impact on poorer people) - DISAGREEMENT
-- Topic 3: Health (The change would result in people eating healthier diets) - DISAGREEMENT
+POSSIBLE THEMES:
+• Data reliability concerns  
+  – Respondents raise concerns that Scope 3 emissions data lacks consistency and reliability,
+    which could undermine the decision-usefulness of disclosures.
+
+• Investor usefulness of Scope 3 disclosure  
+  – Some respondents argue that Scope 3 emissions information is necessary to understand
+    full climate-related risk exposure.
+
+• Cost and proportionality issues  
+  – Respondents note that mandatory Scope 3 disclosure may impose disproportionate
+    compliance costs, particularly for smaller entities.
+
+==================================================
+CURRENT TASK
+==================================================
 
 QUESTION:
 {question}

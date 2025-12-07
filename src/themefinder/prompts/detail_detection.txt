@@ -1,31 +1,115 @@
 {system_prompt}
 
-You will receive a list of RESPONSES, each containing a response_id and a response.
-Your job is to analyze each response to the QUESTION below and decide if a response contains rich evidence.
-You MUST include every response ID in the output.
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-A response is evidence-rich only if it satisfies both of the following:
+This stage is DETAIL (EVIDENCE) DETECTION.
+Your task is to determine whether each response contains
+SUBSTANTIVE, POLICY-RELEVANT DETAIL
+that would be useful to regulators when drafting or revising standards.
 
-Relevance and depth:
-    - It clearly answers the question
-    - AND provides insights that go beyond generic opinion, such as nuanced reasoning, contextual explanation, or argumentation that could inform decision-making
+This is NOT a sentiment task and NOT a theme task.
+It is a SIGNAL QUALITY FILTER.
 
-Substantive evidence, including at least one of:
-    - Specific, verifiable facts or data (e.g., statistics, dates, named reports or studies)
-    - Concrete, illustrative examples that clearly support a broader claim
-    - Detailed personal or professional experiences that include contextual information (e.g., roles, locations, timelines)
+==================================================
+TASK OBJECTIVE
+==================================================
 
-Do NOT classify a response as evidence-rich if it:
-    - Uses vague or general language with no supporting detail
-    - Restates commonly known points without adding new information
-    - Shares personal anecdotes without sufficient context or a clear takeaway
+Given:
+• ONE consultation QUESTION
+• A list of FREE-TEXT RESPONSES (with response_id)
 
-Before answering, ask: Would this response provide useful input to someone drafting policy, beyond what is already commonly known or expected?
+Your task is to assess EACH response and decide whether it contains
+RICH, SUBSTANTIVE EVIDENCE
+as defined below.
 
-For each response, determine:
-EVIDENCE_RICH - does the response contain significant evidence as defined above?
-Choose one from ['YES', 'NO']
+You MUST include every response_id in the output.
 
+==================================================
+DEFINITION: EVIDENCE-RICH RESPONSE
+==================================================
 
-QUESTION: \n {question}
-RESPONSES: \n {responses}
+A response should be classified as EVIDENCE_RICH = YES
+ONLY IF it satisfies BOTH conditions:
+
+--------------------------------------------------
+1. Question-Relevant Substance
+--------------------------------------------------
+
+The response:
+• Clearly addresses the question being asked, AND
+• Provides reasoning, explanation, or insight that goes beyond
+  a generic opinion or simple agreement/disagreement.
+
+--------------------------------------------------
+2. Concrete Supporting Detail
+--------------------------------------------------
+
+The response contains AT LEAST ONE of the following:
+
+• Specific and verifiable references
+  – named legislation, standards, frameworks, or schemes
+    (e.g. IFRS S1/S2, NGER Scheme, GHG Protocol)
+  – reports, consultations, studies, or regulatory documents
+  – dates, thresholds, classifications, or technical requirements
+
+• Concrete illustrative examples
+  – clear examples of how a requirement would operate in practice
+  – entity-type–specific scenarios (e.g. NFPs, superannuation funds,
+    public sector entities)
+  – implementation, assurance, or operational impacts explained clearly
+
+• Contextualised professional or organisational experience
+  – explanation grounded in organisational role, sector, or reporting context
+  – includes sufficient background to explain *why* the experience
+    is relevant to policy design
+
+==================================================
+WHAT IS NOT EVIDENCE-RICH
+==================================================
+
+Classify EVIDENCE_RICH = NO if the response:
+
+• Merely states agreement or disagreement without explanation
+• Uses high-level or generic language with no concrete support
+• Repeats commonly expected concerns (e.g. "costs will increase")
+  without elaboration
+• Makes broad assertions without context or justification
+• Is empty, procedural, or non-substantive
+
+==================================================
+DECISION TEST
+==================================================
+
+Before assigning YES, ask:
+
+“Could this response be reasonably cited, summarised,
+or relied upon in a regulatory discussion paper,
+consultation summary, or Board briefing —
+above and beyond what is already obvious?”
+
+If the answer is NO → EVIDENCE_RICH = NO
+
+==================================================
+OUTPUT FORMAT (MANDATORY)
+==================================================
+
+For EACH response, output exactly:
+
+response_id: <id>
+EVIDENCE_RICH: <YES | NO>
+
+Rules:
+• Every response_id MUST appear exactly once
+• Do NOT add explanations or commentary
+• Do NOT omit empty responses
+• Use ONLY 'YES' or 'NO'
+
+==================================================
+CURRENT TASK
+==================================================
+
+QUESTION:
+{question}
+
+RESPONSES:
+{responses}

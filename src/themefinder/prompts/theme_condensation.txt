@@ -1,34 +1,108 @@
 {system_prompt}
 
-Below is a question and a list of topics extracted from answers to that question. 
+You are analyzing organizational submissions to the AASB ED SR1 Consultation.
 
-This list contains a large number of duplicate and redundant topics that present the same concept with different phrasing.
+This stage is THEME CONDENSATION.
+Initial themes have already been generated in a previous step.
+Those themes may overlap, partially duplicate, or describe the same underlying idea
+using different language.
 
-Each topic has a topic_label, topic_description, and may have a source_topic_count field indicating how many original topics it represents.
+Your task is to consolidate those themes into a smaller set of
+HIGH-LEVEL CORE THEMES, while preserving informational richness.
 
-Your task is to analyze these topics and produce a refined list that:
-1. Significantly reduces the total number of topics
-2. Identifies and preserves core themes that appear frequently
-3. Combines redundant topics
-4. Tracks the total number of original topics combined into each new topic
+==================================================
+TASK OBJECTIVE
+==================================================
 
-Guidelines for Topic Analysis:
-- Begin by identifying distinct concept clusters in the topics
-- Consider the context of the question when determining topic relevance
-- Look for complementary perspectives that could enrich understanding of the same core concept
-- Consider the key ideas behind themes when merging, don't simply focus on the words used in the label and description
-- When combining topics:
-  * For topics without a source_topic_count field, assume count = 1
-  * For topics with source_topic_count, use their existing count
-  * The new topic's count should be the sum of all combined topics' counts
+Given:
+• ONE consultation QUESTION
+• A list of GENERATED TOPICS (each with a topic_label and topic_description)
 
-For each topic in your output:
-1. Choose a clear, representative label that captures the essence of the combined or preserved topic
-2. Write a concise description that incorporates key insights from all constituent topics, this should only be a single sentence
-3. Include the total count of original topics combined by summing the source_topic_counts of merged topics (or 1 for topics without a count)
+Your task is to:
 
-QUESTION:
-{question}
+1. Identify themes that refer to the same underlying issue, concern, rationale, or recommendation
+2. Merge redundant or highly overlapping themes
+3. Preserve themes that reflect genuinely distinct policy-relevant considerations
+4. Produce a condensed list of themes that:
+   – is significantly smaller than the input list
+   – reflects the main lines of feedback received
+   – is suitable for synthesis in consultation reports or briefing papers
 
-TOPICS:
-{responses}
+This stage focuses on **conceptual consolidation**, not final wording perfection.
+
+==================================================
+MERGING PRINCIPLES
+==================================================
+
+When deciding whether to merge topics, consider:
+
+• Conceptual equivalence  
+  – Do the topics address the same substantive policy issue, even if framed differently?
+
+• Functional similarity  
+  – Would a policymaker respond to these topics with the same regulatory or drafting action?
+
+• Perspective compatibility  
+  – Topics expressing different rationales (e.g. cost, data quality, consistency)
+    MAY be merged if they jointly explain one core concern.
+
+DO NOT merge topics if they:
+• Relate to different sections of the standard
+• Require meaningfully different policy responses
+• Address different reporting entities (unless explicitly comparable)
+
+==================================================
+COUNTING RULES
+==================================================
+
+Topics may include a field:
+• source_topic_count (number of original generated topics already merged)
+
+Apply the following rules:
+
+• If a topic has no source_topic_count, assume count = 1
+• When merging topics:
+  – Sum all source_topic_count values (or 1 where missing)
+  – Report the total as the new source_topic_count
+
+This count represents **signal strength**, not number of respondents.
+
+==================================================
+OUTPUT REQUIREMENTS
+==================================================
+
+For EACH condensed theme, output:
+
+• topic_label  
+  – Clear, policy-relevant, and representative
+  – More general than generation-stage labels
+  – Avoid emotive or argumentative language
+
+• topic_description  
+  – ONE sentence only
+  – Integrates the key ideas from merged themes
+  – Written in neutral, analytical language
+
+• source_topic_count  
+  – Total number of original generated topics combined
+
+DO NOT:
+• introduce new themes not grounded in the input
+• discard themes unless they are clearly redundant or trivial
+• quote or reference individual responses or organisations
+• perform sentiment or POSITION analysis
+
+==================================================
+IMPORTANT CLARIFICATIONS
+==================================================
+
+• This stage reduces redundancy, not nuance
+• Borderline cases should bias toward preserving information
+• Final wording standardisation will occur in a later stage
+
+==================================================
+EXAMPLE (ILLUSTRATIVE ONLY)
+==================================================
+
+INPUT TOPICS:
+• "High compliance cost for small ent
