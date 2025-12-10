@@ -188,6 +188,126 @@ Example 4 — PRI:
 Output:
 POSITION: ANSWERED
 
+==================================================
+### Q31 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"HoTARAC members are concerned that the pressure to develop sector-neutral sustainability standards without specifically addressing a range of fundamental issues for the not-for-profit public sector increases the risk of a costly and sub-optimal implementation. Several jurisdictions hold major reservations that due process may be unintentionally neglected in the desire to achieve sector neutrality without providing sufficiently clear practical guidance or developing a cost-effective implementation path for the not-for-profit and public sector. HoTARAC observe that the question around the appropriate level(s) at which Commonwealth and State public sector sustainability reporting should occur (i.e. whole-of-state, whole-of-government, individual agencies) has not been formally considered and discussed between the AASB and the public sector, or within the public sector for that matter. The outcomes of the IPSASB and GRI projects (and their relevance to public sector reporting in Australia) are also unknown at present. Consistent with our responses in questions 26 and 27, the strategies proposed by the AASB aim to achieve sector neutrality in theory. Whilst acknowledging the efforts made by the AASB, there remains a significant concern that not-for-profit and public sector entities will bear a significant time and monetary cost impost to achieve this outcome in practice. There is also concern that sufficient practical guidance does not exist as yet to facilitate the not-for-profit sector’s transition to sustainability reporting generally. Collectively, HoTARAC members believe it is too early to conclude whether the AASB’s sustainability reporting standard setting framework has been appropriately applied when considering the potential application of these standards in the public sector context."
+Output:
+POSITION: ANSWERED
+
+Example 2 — EY: 
+"Refer to our earlier responses. We do not have any further comments."
+Output:
+POSITION: NO_ADDITIONAL_GUIDANCE
+
+Example 3 — CA ANZ:
+"Outlined below are some regulatory issues we have identified, which may affect implementation of the proposals. (Director declaration) We recommend consideration be given to the practicality and interaction with legislation of the requirement for a Statement of Compliance. ASRS S1 paragraph 72 requires an entity to make an ‘explicit and unreserved statement of compliance’ noting that an entity cannot claim climate-related disclosures comply with ASRS unless they comply with all the requirements of ASRS. This assumes that ASRS only apply for climate-related disclosures. Further, we note in Treasury Laws Amendment Bill 2024: Climate-related financial disclosure – Exposure draft S296A(6)(a) that directors make a declaration ‘in compliance with the sustainability standards, an explicit and unreserved statement of compliance with international sustainability reporting standards’ we note that the standards as presented in ASRS would not result in compliance with the IFRS Sustainability Disclosure Standards. (Not-for profit entities) Members working in and for NFP entities have expressed concern about the potential struggles they foresee in relation to the proposals. Many have expressed that NFPs will not have the resources to engage consultants to assist with their preparation for disclosures and the process will fall back onto existing staff, who do not have the knowledge required. In addition, the NFP sector, in general, already struggles to attract and retain talent adding additional issues to meet obligations under ASRS. There are also concerns that NFP entities that are able to report their financial information under the reduced disclosure regime (RDR) in Australia will be required to provide full disclosures under ASRS. As noted earlier, we recommend consideration is given to a simplified disclosure for NFP entities. (Public sector entities) Which level of government entity that makes the disclosures (i.e., consolidated or entity) will need to be determined with consideration of the decision usefulness of information for the users of public sector entity disclosure information."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+"We encourage AASB and the Australian Government to coordinate and align the various policy instruments coming into place, especially the proposed taxonomy that will have bearings on reporting. We understand the Government’s current intention that during the initial regulatory phase, the planned sustainable taxonomy will not have a formal regulatory status. Ultimately, in order to be an effective tool and to achieve its objectives, it will need to be embedded in the overall regulatory architecture and disclosure requirements. In particular, for financial institutions to be able to use the taxonomy in their own activities and products they will first need data about the underlying alignment of business activities of individual firms within their portfolios and loan books. For investors to have sufficient confidence in this information as a basis for investment decisions and communications, as a first step, disclosure from businesses will need to be mandated or otherwise incentivised and subject to appropriate regulatory oversight. It should finally be understood that while a taxonomy is a cornerstone of a robust sustainable finance strategy, it will not enable the transition to a sustainable economy by itself. It should therefore be developed in parallel to other instruments, which includes climate-related disclosure requirements, to ensure a coordinated and effective approach, as well as interact with other policy instruments such as stewardship and broader disclosure requirements (for both corporates and investors)."
+Output:
+POSITION: ANSWERED
+
+==================================================
+### Q32 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"HoTARAC members consider that the proposals in the [draft] ASRS do create significant auditing and assurance challenges, particularly, in the short to medium term. General comments regarding auditing and assurance challenges: The International Auditing and Assurance Standards Board (IAASB) has only just released for commentary the proposed standard ISSA 5000 General Requirements for Sustainability Assurance Engagements. Ideally, an Australian Equivalent to ISSA 5000 (or other mandatory guidance) should be in place at the same time as the release of the final ASRS. Auditing will take time to mature for such new proposals. Accordingly, a staged approach from limited to reasonable assurance is considered appropriate, and we note the approach proposed by the Commonwealth on 12 January 2024 in their recent Consultation Paper, which aligns audit requirements with either size of entity or size of emissions. We refer to HoTARAC’s submission on IFRS S1 and S2 exposed by the AASB in ED321 which identifies audit challenges. Having the standard ISSA 5000 will be progress, but we question whether there is sufficient capability amongst assurance providers to be able to apply it effectively and exercise any necessary judgements on a consistent basis. The [draft] ASRS are likely to bring significant challenges as the skill set and experience required to apply them will extend beyond financial reporting. This is likely to highlight the scarcity of this expertise, knowledge and skill set in the market. In addition, the nature of the information to be audited in the interim may be of a qualitative nature and may include judgement, making it challenging to provide reasonable assurance. We believe the public sector audit offices will face significant auditing and assurance challenges. We would like to highlight that there is currently no established framework to audit sustainability information in the public sector. This includes considerations such as assessing faithful representation and relevance of information, as well as established auditable trails on information obtained by entities. Specific challenges regarding auditing disclosures prepared under the [draft] ASRS:  Paragraphs Aus4.2 in [draft] ASRS 2 and Aus6.2 in [draft] ASRS 1 require entities to determine whether they have material climate-related risks and opportunities that could reasonably be expected to affect the entity’s prospects – the current lack of materiality guidance increases the potential for disagreement between preparers, auditors and regulators (in both the public and private sector) about whether a report should be prepared at all because of disagreements about what is material (refer to our response in question 3). In addition, HoTARAC considers that the following Aus specific requirements in the [draft] ASRS may propose challenges to auditors and assurance practitioners in the Australian environment, in the context of attaining reasonable assurance: Paragraphs Aus4.1 in [draft] ASRS 2 and Aus6.1 in [draft] ASRS 1 with proposed not-for-profit sector modifications – there may be challenges for auditors to conclude on whether the reporting entity has conducted an exhaustive search and determining what constitutes an ‘exhaustive search’ (refer to our response in question 25). Paragraphs Aus4.1 in [draft] ASRS 2 and Aus6.1 in [draft] ASRS 1 with proposed not-for-profit sector modifications – there may be challenges for auditors in concluding on what constitutes ‘reasonable and supportable information’ on which entities have based their decisions regarding disclosures – although we note that the proposed paragraphs in the [draft] ASRS on connected information will require that the entity base their judgements and estimates on consistent data and assumptions used in the preparation of the financial statements. Where the quality and magnitude of disclosures by entities develops from qualitative to quantitative over time, there will be more reliance placed by auditors on information produced by the entity and data sources, as well as key inputs and assumptions (refer to our response in question 25). In the application of materiality related to not-for-profit entities, auditors may need to consider qualitative versus quantitative materiality. We note there is application guidance on assessing materiality included in [draft] ASRS1. The Commonwealth’s recent Consultation Paper makes clear that the intention is for the financial statements auditor to also provide assurance over the climate-related financial disclosures. As a result, the proposed Aus paragraphs on climate resilience and metrics and targets will necessarily require the financial statements auditor to rely on non-accounting experts."
+Output:
+POSITION: ANSWERED
+
+Example 2 — EY: 
+"In our view, any auditing and assurance challenges associated with climate-related financial disclosures should be addressed by Treasury and the Auditing and Assurance Standards Board in setting the requirements for assurance of the disclosures. We do not think that the AASB should consider amending the ASRS Standards in an attempt to address any specific auditing and assurance concerns."
+Output:
+POSITION: ANSWERED
+
+Example 3 — CA ANZ:
+"Resourcing: Small to medium audit and assurance practices will often rely on international talent to fill short term gaps/vacancies throughout the year. This is often done either through secondment opportunities or ‘offshoring’ certain aspects of the assurance engagement. This has been possible through the adoption of international accounting and assurance standards in Australia. Paragraph 12 of the Framework also indicates the AASB’s understanding that alignment with IFRS Sustainability Disclosure Standards will facilitate the movement of professionals across sectors and borders. The deviation of the ASRS from the IFRS Sustainability Disclosure Standards make this approach more difficult for the sector, as Australian specific skills will be needed. This will present a significant challenge in the current market where sustainability and climate-related assurance talent is already extremely limited and could seriously affect the ability of the sector to build the necessary capacity. In addition, we note from paragraph 12 of the AASB Sustainability Reporting Framework it would be difficult ‘facilitate the movement of professionals across sectors and boarders’ when standards are not internationally aligned. Guidance: It is critical for the AASB and the Australian Auditing and Assurance Standards Board (AUASB) to work collaboratively to develop guidance to support both preparers of climate-related disclosures and assurance practitioners. Guidance in areas where there are judgements and assumptions in the disclosures – such as materiality assessments, choice of industry metrics and assumptions for scenario analysis will be important as users will rely on independent external assurance to enhance the credibility of these more complex areas of climate-related disclosures."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+""
+Output:
+POSITION: NO_RESPONSE
+
+==================================================
+### Q33 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"HoTARAC members hold divergent views around the appropriate level(s) of reporting by the public sector and whether the [draft] ASRS should be applied at an individual agency and/or whole-of-government and whole-of-state level, with the level of reporting to be determined by each jurisdiction.This reflects differing views on who are the users of public sector climate-related financial information and what their information needs are. At least one jurisdiction views entity-level reporting to be appropriate if the reporting objective for the public sector is to assess agency management of climate risks or to achieve alignment with the private sector. However, a majority of jurisdictions hold the view that individual agency policies on climate are normally dictated by, and thus interlinked with, central government policy. Therefore, individual agency disclosures should only be made as directed by the Government in each jurisdiction. This ensures alignment of individual agency disclosures with government policy and consistent application across the public sector within that jurisdiction. Furthermore, entities in the General Government Sector do not source debt financing for their operations. Such borrowings are ordinarily undertaken by that jurisdiction’s Treasury corporation who access debt capital markets on behalf of whole-of-government and then on-lend to individual agencies as directed by government. Depending on the jurisdiction, some public sector entities in the PNFC or PFC sectors may access wholesale debt markets directly and solely for their own financing needs, but some jurisdictions mandate that even PNFC and PFC entities raise their finance via that jurisdiction’s Treasury corporation. Observations by jurisdictions already providing voluntary sustainability information to debt market participants has noted a greater focus on whole-of-government metrics (General Government and Total State Sector) and typically less focus on individual agencies, given that credit and sustainability ratings are assessed at a whole-of-government level for issued bonds. We have identified a number of requirements within [draft] ASRS 2 where inconsistent disclosures may arise between individual agencies and whole-of-government, which will reduce the usefulness of the information. Significant areas identified include: (Climate scenario analysis/modelling) 1. Theoretically, the assumptions underpinning such modelling would be consistent (and aligned where applicable) between whole-of-state, whole-of-government, and individual agencies, in line with government policy positions. Individual agencies adopting their own modelling that is inconsistent with whole-of-government positions is highly likely to be untenable from a public policy and capital market perspective. Individual agencies preparing separate climate modelling would be a significant, if not prohibitive, cost to government for questionable benefit, and problematic where differences arise. This will be more pertinent where debt market participants continue to assess government sustainability metrics at a whole-of-government level. 2. The exception might be where a government has an agency operating outside the jurisdiction’s geographical boundaries that warrants a specific scenario analysis – which supports jurisdictions making their own determination around what climate scenario modelling is appropriate. 3. There is a further unresolved question as to whether the scientific basis behind climate scenario modelling as adopted by the Commonwealth needs to agree with the modelling adopted by States and Territories (or at least be reconciled) to be truly useful/meaningful to public sector users. (Scope 3 emissions reporting) 1. As noted above, capital markets are predominantly focusing on early-stage sustainability reporting at the General Government/Total State sector level. In the context of the Commonwealth, States and Territories, many Scope 3 emissions reported by individual agencies will be either Scope 1 (generated/produced by the Government) or Scope 2 (purchased emissions) when consolidated to the General Government and Total State sector levels. 2. For this reason, most jurisdictions are extremely concerned about the cost that will be incurred if full Scope 3 emissions reporting by individual agencies and whole-of-government is mandated for the public sector. 3. The level at which climate reporting is prepared in the public sector becomes highly relevant to the cost and pathway to implementing Scope 3 emissions reporting. Methods to eliminate the double count (or estimate what percentage of Scope 3 emissions are double counted) will need to be developed by governments if full Scope 3 reporting is implemented. This has the potential to be a significant administrative task in terms of resources. 4. Consequently, a number of jurisdictions consider that Scope 3 reporting in the public sector requires further consideration as to the most effective way it is addressed within a government context to effectively meet user needs, whilst avoiding confusion and erroneous conclusions being drawn regarding government emissions (refer to our response to question 18). Reflecting the wide range of financial statement ‘users’ in the public sector context, and the divergent views on the levels of reporting in the public sector, our response demonstrates why HoTARAC considers that further work is required before any conclusion can be drawn regarding the usefulness of this reporting to public sector users."
+Output:
+POSITION: ANSWERED
+
+Example 2 — EY: 
+"We consider that the ASRS Standards will result in climate-related financial information that is useful to users. This is because the proposals are based on the ISSB Standards baseline, which was subject to an extensive consultation process and those standards were based on the well established TCFD framework. However, in our view, for the ASRS Standards to be in the best interests of the Australian economy, the AASB should adopt the ISSB Standards baseline without Australian-specific departures."
+Output:
+POSITION: ANSWERED
+
+Example 3 — CA ANZ:
+"We support the AASB’s remit to issue Sustainability Disclosure Standards domestically with a climate first approach however, in our opinion, the usefulness of information from the climate-related financial information expected from the ASRS is limited due to the lack of international alignment."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+"Yes. The proposals would provide investors with information they need to assess portfolio companies’ climate-related risks and opportunities, including: the nature of these risks and opportunities, their current and potential effects on the company, strategic changes in response and how they will be implemented, and progress in meeting existing targets and objectives. This level of detail is necessary because investors need to understand the effects of climate-related risks and opportunities on portfolio companies, and potential change to these effects given the strategy and other initiatives to address these."
+Output:
+POSITION: ANSWERED
+
+==================================================
+### Q34 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"HoTARAC members offer no formal comments in response to question 34, other than to acknowledge that access to domestic and international capital markets (including by the three tiers of Government in Australia) increasingly requires climate and sustainability factors to be addressed by bond issuers in response to investor demands. Consistent with earlier responses, HoTARAC would welcome further engagement with the AASB to progress developing an effective sustainability reporting framework for the public sector."
+Output:
+POSITION: NO_ADDITIONAL_GUIDANCE
+
+Example 2 — EY: 
+"We consider that the ASRS Standards will result in climate-related financial information that is useful to users. This is because the proposals are based on the ISSB Standards baseline, which was subject to an extensive consultation process and those standards were based on the well established TCFD framework. However, in our view, for the ASRS Standards to be in the best interests of the Australian economy, the AASB should adopt the ISSB Standards baseline without Australian-specific departures."
+Output:
+POSITION: ANSWERED
+
+Example 3 — CA ANZ:
+"We support the continued work of Government to establish a legal framework and sustainability disclosure standards to support mandatory climate-related disclosures. As noted in our cover letter, we have significant concerns relating to the deviation of ASRS and strongly advocate for the prioritisation of international alignment to IFRS S1 and IFRS S2. Paragraph 12 of the AASB Framework indicates the importance of international alignment of ASRS for the Australian economy. As currently drafted, we do not consider the ASRS to be sufficiently internationally aligned and as such would not be in the best interests of the Australian economy. Further, the ASRS, as they currently stands, does not provide the sufficient architecture to meet Government’s signal (within its sustainable finance strategy) that sustainability reporting will expand into other sustainability thematic areas."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+"The PRI supports the introduction of mandatory climate-related disclosure standards and welcomes the proposals to the extent that we make recommendations to ensure that IFRS S1 and S2 are upheld as baselines, with modifications made primarily made where they are additive to them. Many of the PRI’s signatories are both users and preparers of climate change and other sustainability-related information. If implemented effectively with our recommendations considered, mandatory and globally standardised disclosure of climate change-related risks, opportunities, and impacts will improve market transparency, assist both companies and investors to navigate the transition and help facilitate two-way global investment flows into Australia, which will ultimately be in the best interest of its economy."
+Output:
+POSITION: ANSWERED
+
+==================================================
+### Q35 — Open-Ended Descriptive Question
+==================================================
+
+Example 1 — HoTARAC:
+"We have no further comments to add."
+Output:
+POSITION: NO_ADDITIONAL_GUIDANCE
+
+Example 2 — EY: 
+"However, in our view, for the ASRS Standards to be in the best interests of the Australian economy, the AASB should adopt the ISSB Standards baseline without Australian-specific departures."
+Output:
+POSITION: ANSWERED
+
+Example 3 — CA ANZ:
+"We support the continued work of Government to establish a legal framework and sustainability disclosure standards to support mandatory climate-related disclosures. As noted in our cover letter, we have significant concerns relating to the deviation of ASRS and strongly advocate for the prioritisation of international alignment to IFRS S1 and IFRS S2. Paragraph 12 of the AASB Framework indicates the importance of international alignment of ASRS for the Australian economy. As currently drafted, we do not consider the ASRS to be sufficiently internationally aligned and as such would not be in the best interests of the Australian economy. Further, the ASRS, as they currently stands, does not provide the sufficient architecture to meet Government’s signal (within its sustainable finance strategy) that sustainability reporting will expand into other sustainability thematic areas."
+Output:
+POSITION: ANSWERED
+
+Example 4 — PRI:
+""
+Output:
+POSITION: NO_RESPONSE
+
 You MUST choose exactly one POSITION for every response.  
 You MUST NOT leave the POSITION field blank.  
 Use only the allowed POSITION values for each question type.
