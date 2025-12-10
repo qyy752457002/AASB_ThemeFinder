@@ -28,7 +28,7 @@ Q2, Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q11, Q13–Q20, Q22, Q23, Q25, Q26, Q27, Q29
 
 Valid POSITION values are:
 
-[AGREEMENT, DISAGREEMENT, UNCLEAR]
+[AGREEMENT, DISAGREEMENT, NO_RESPONSE]
 
 --------------------------------------------------
 2. **Multiple-Option Selection Questions**
@@ -39,7 +39,7 @@ Q1
 
 Valid POSITION values are:
 
-[OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, UNCLEAR]
+[OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, NO_RESPONSE]
 
 --------------------------------------------------
 3. **Open-Ended Descriptive Questions**
@@ -59,7 +59,7 @@ These questions ask for:
 
 Valid POSITION values:
 
-[ANSWERED, NO_ADDITIONAL_GUIDANCE, UNCLEAR]
+[ANSWERED, NO_ADDITIONAL_GUIDANCE, NO_RESPONSE]
 
 ==================================================
 PROCESS FOR CLASSIFICATION
@@ -133,7 +133,7 @@ POSITION: DISAGREEMENT
 Example 4 — PRI:
 "" (empty response)
 Output:
-POSITION: UNCLEAR
+POSITION: NO_RESPONSE
 
 ==================================================
 ### Q24 — Open-Ended Descriptive Question
@@ -160,7 +160,7 @@ POSITION: ANSWERED
 Example 4 — PRI:
 "" (empty)
 Output:
-POSITION: UNCLEAR
+POSITION: NO_RESPONSE
 
 ==================================================
 ### Q30 — Open-Ended Descriptive Question
