@@ -38,37 +38,130 @@ Otherwise you will need whichever variables [LangChain](https://www.langchain.co
 
 ```python
 import asyncio
-from dotenv import load_dotenv
+import json
+import time
 import pandas as pd
-from langchain_openai import AzureChatOpenAI
+from pathlib import Path
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 from themefinder import find_themes
 
-# If needed, load LLM API settings from .env file
+# Load .env
 load_dotenv()
 
-# Initialise your LLM of choice using langchain
-llm = AzureChatOpenAI(
-    model="gpt-4o",
+# ==========================
+# Load questions.json
+# ==========================
+def load_questions():
+    with Path("questions.json").open("r", encoding="utf-8") as f:
+        questions_raw = json.load(f)
+
+    # Convert to dictionary: {"Q1": "full question text", ...}
+    questions_dict = {q["question_id"]: q["content"] for q in questions_raw}
+    return questions_dict
+
+# ==========================
+# Load responses.json
+# ==========================
+def load_responses():
+    with Path("responses.json").open("r", encoding="utf-8") as f:
+        raw = json.load(f)
+
+    df = pd.DataFrame(raw)
+    df["response_id"] = df.index + 1
+    df = df.rename(columns={"response_text": "response"})
+    return df
+
+# ==========================
+# Initialise LLM
+# ==========================
+# Note: "gpt-5" may not exist. Common models: "gpt-4o", "gpt-4-turbo", "gpt-4"
+# If you encounter errors, try changing to a valid model name
+llm = ChatOpenAI(
+    model="gpt-4o",  # TODO: Verify this model exists. If not, use "gpt-4o" or "gpt-4-turbo"
     temperature=0,
 )
 
-# Set up your data
-responses_df = pd.DataFrame({
-   "response_id": ["1", "2", "3", "4", "5"],
-   "response": ["I think it's awesome, I can use it for consultation analysis.", 
-   "It's great.", "It's a good approach to topic modelling.", "I'm not sure, I need to trial it more.", "I don't like it so much."]
-})
+# ==========================
+# System Prompt
+# ==========================
+system_prompt = (
+    "You are analysing consultation responses to AASB ED SR1. "
+    "When generating themes, ALWAYS output 'Label: Description'. "
+    "If the submission includes multiple viewpoints, identify the dominant overall position."
+)
 
-# Add your question
-question = "What do you think of ThemeFinder?"
+# ==========================
+# Main: Loop through questions
+# ==========================
+async def process_single_question(question_id, question_text, df):
 
-# Make the system prompt specific to your use case 
-system_prompt = "You are an AI evaluation tool analyzing survey responses about a Python package."
+    print(f"\n==============================")
+    print(f"➡ Processing {question_id}")
+    print(f"==============================")
 
-# Run the function to find themes, we use asyncio to query LLM endpoints asynchronously, so we need to await our function
+    # Clean dataframe for themefinder
+    theme_df = df[["response_id", "response"]]
+
+    # Run theme extraction
+    result = await find_themes(
+        theme_df,
+        llm,
+        question_text,
+        system_prompt=system_prompt
+    )
+
+    # Build JSON output
+    output = {
+        "question_id": question_id,
+        "question_text": question_text,
+        "sentiment": result["sentiment"].to_dict(orient="records"),
+        "themes": result["themes"].to_dict(orient="records"),
+        "mapping": result["mapping"].to_dict(orient="records"),
+        "detailed_responses": result["detailed_responses"].to_dict(orient="records"),
+        "unprocessables": result["unprocessables"].to_dict(orient="records")
+    }
+
+    # Save file (e.g. result_Q1.json)
+    out_path = Path(f"result_{question_id}.json")
+    out_path.write_text(json.dumps(output, indent=4, ensure_ascii=False), encoding="utf-8")
+
+    print(f"✔ Saved result for {question_id}: {out_path.resolve()}")
+
+
 async def main():
-    result = await find_themes(responses_df, llm, question, system_prompt=system_prompt)
-    print(result)
+
+    # Load both files
+    responses_df = load_responses()
+    questions_dict = load_questions()
+
+    print("\n=== Loaded responses.json ===")
+    print(responses_df)
+
+    # Get all question_ids that appear in responses.json
+    unique_question_ids = sorted(responses_df["question_id"].unique())
+
+    print("\n=== Detected question_ids ===")
+    print(unique_question_ids)
+
+    # Process each question in a loop
+    for qid in unique_question_ids:
+
+        if qid not in questions_dict:
+            print(f"❌ WARNING: Cannot find {qid} in questions.json, skipping.")
+            continue
+
+        # Filter responses for this question
+        df_subset = responses_df[responses_df["question_id"] == qid].copy()
+
+        question_text = questions_dict[qid]
+
+        # Call processing function
+        await process_single_question(qid, question_text, df_subset)
+
+        time.sleep(1)
+
+    print("\n🎉 All questions processed successfully!")
 
 if __name__ == "__main__":
     asyncio.run(main())
