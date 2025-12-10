@@ -7,18 +7,18 @@ class Position(str, Enum):
     aligned with `prompts/sentiment_analysis.txt`.
 
     Mapping to prompt sections:
-    1. Standard Agree/Disagree Questions       → AGREEMENT, DISAGREEMENT, UNCLEAR
+    1. Standard Agree/Disagree Questions       → AGREEMENT, DISAGREEMENT, NO_RESPONSE
        (Q2, Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q11, Q13–Q20, Q22, Q23, Q25, Q26, Q27, Q29)
-    2. Multiple-Option Selection Questions     → OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, UNCLEAR
+    2. Multiple-Option Selection Questions     → OPTION_1, OPTION_2, OPTION_3, OPTION_OTHER, NO_RESPONSE
        (Q1 only)
-    3. Open-Ended Descriptive Questions        → ANSWERED, NO_ADDITIONAL_GUIDANCE, UNCLEAR
+    3. Open-Ended Descriptive Questions        → ANSWERED, NO_ADDITIONAL_GUIDANCE, NO_RESPONSE
        (Q6, Q12, Q21, Q24, Q28, Q30–Q35)
     """
 
     # 1. Standard Agree/Disagree Questions
     AGREEMENT = "AGREEMENT"
     DISAGREEMENT = "DISAGREEMENT"
-    UNCLEAR = "UNCLEAR"
+    UNCLEAR = "NO_RESPONSE"
 
     # 2. Multiple-Option Selection Questions (Q1 only)
     OPTION_1 = "OPTION_1"
