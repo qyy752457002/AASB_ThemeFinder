@@ -585,6 +585,20 @@ async def theme_mapping(
         f"Running theme mapping on {len(responses_df)} responses using {len(refined_themes_df)} themes"
     )
 
+    # Handle case where no themes were generated (empty DataFrame)
+    if refined_themes_df.empty or len(refined_themes_df) == 0:
+        logger.warning(
+            "No themes available for mapping. Assigning 'UNCLEAR' label to all responses."
+        )
+        # Create default mapping with "UNCLEAR" for all responses
+        mapping_records = [
+            {"response_id": int(rid), "labels": ["UNCLEAR"]}
+            for rid in responses_df["response_id"]
+        ]
+        mapping_df = pd.DataFrame(mapping_records)
+        # Return empty unprocessable DataFrame since all responses are handled
+        return mapping_df, pd.DataFrame()
+    
     def transpose_refined_themes(refined_themes: pd.DataFrame):
         """Transpose topics for increased legibility."""
         transposed_df = pd.DataFrame(

@@ -191,7 +191,12 @@ class ThemeGenerationResponses(ValidatedModel):
     @model_validator(mode="after")
     def run_validations(self) -> "ThemeGenerationResponses":
         """Ensure there are no duplicate themes"""
-        self.validate_non_empty_fields()
+        # Theme generation is allowed to return an empty list:
+        # the prompt explicitly instructs the LLM to produce no themes for
+        # empty / non-substantive responses. Treat [] as a valid "no themes"
+        # outcome rather than a validation failure that triggers retries.
+        if not self.responses:
+            return self
         labels = [theme.topic_label.lower().strip() for theme in self.responses]
         if len(labels) != len(set(labels)):
             raise ValueError("Duplicate topic labels detected")
