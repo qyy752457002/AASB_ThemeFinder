@@ -281,6 +281,8 @@ async def theme_condensation(
         logger.info(
             f"{n_themes} larger than batch size, using recursive theme condensation"
         )
+        # Convert themes_df to topics format for prompt template
+        topics = themes_df.to_dict(orient="records")
         themes_df, _ = await batch_and_run(
             themes_df,
             prompt_template,
@@ -289,6 +291,7 @@ async def theme_condensation(
             question=question,
             system_prompt=system_prompt,
             concurrency=concurrency,
+            topics=topics,
             **kwargs,
         )
         themes_df = themes_df.sample(frac=1).reset_index(drop=True)
@@ -298,6 +301,8 @@ async def theme_condensation(
             break
         n_themes = themes_df.shape[0]
 
+    # Convert themes_df to topics format for prompt template
+    topics = themes_df.to_dict(orient="records")
     themes_df, _ = await batch_and_run(
         themes_df,
         prompt_template,
@@ -306,6 +311,7 @@ async def theme_condensation(
         question=question,
         system_prompt=system_prompt,
         concurrency=concurrency,
+        topics=topics,
         **kwargs,
     )
 
