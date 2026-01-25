@@ -105,4 +105,41 @@ EXAMPLE (ILLUSTRATIVE ONLY)
 ==================================================
 
 INPUT TOPICS:
-• "High compliance cost for small ent
+• topic_label: High compliance cost for small entities
+  topic_description: Smaller reporting entities may face excessive compliance costs when implementing the proposed disclosure requirements.
+  source_topic_count: 1
+
+• topic_label: Disproportionate burden on SMEs
+  topic_description: Small and medium-sized enterprises would bear a disproportionate financial burden relative to their resources.
+  source_topic_count: 1
+
+• topic_label: Cost concerns for smaller entities
+  topic_description: Respondents express concerns about the financial impact of mandatory disclosures on entities with limited resources.
+  source_topic_count: 1
+
+• topic_label: Data collection challenges
+  topic_description: Entities face significant challenges in collecting the required climate-related data, particularly for Scope 3 emissions.
+  source_topic_count: 1
+
+• topic_label: Scope 3 data availability issues
+  topic_description: Scope 3 emissions data is difficult to obtain and may not be readily available from supply chain partners.
+  source_topic_count: 1
+
+CONDENSED OUTPUT:
+• topic_label: Proportionality of compliance costs
+  topic_description: Concerns that mandatory climate-related disclosure requirements may impose disproportionate compliance costs on smaller or less-resourced reporting entities.
+  source_topic_count: 3
+
+• topic_label: Data availability and collection challenges
+  topic_description: Challenges in obtaining and collecting required climate-related data, particularly for Scope 3 emissions from supply chain partners.
+  source_topic_count: 2
+
+==================================================
+CURRENT TASK
+==================================================
+
+QUESTION:
+{question}
+
+TOPICS:
+{topics}
