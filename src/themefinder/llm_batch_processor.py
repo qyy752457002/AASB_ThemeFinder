@@ -21,12 +21,10 @@ from tenacity import (
 
 from themefinder.themefinder_logging import logger
 
-
 @dataclass
 class BatchPrompt:
     prompt_string: str
     response_ids: list[int]
-
 
 async def batch_and_run(
     input_df: pd.DataFrame,
@@ -256,7 +254,7 @@ def generate_prompts(
     prompt_template: PromptTemplate,
     input_data: pd.DataFrame,
     batch_size: int = 50,
-    max_prompt_length: int = 50_000,
+    max_prompt_length: int = 110000,
     partition_key: str | None = None,
     **kwargs,
 ) -> list[BatchPrompt]:
@@ -415,17 +413,38 @@ def calculate_string_token_length(input_text: str, model: str = None) -> int:
     Args:
         input_text (str): The input string to tokenize.
         model (str, optional): The model name used for tokenization. If not provided,
-            uses the MODEL_NAME environment variable or defaults to "gpt-4o".
+            uses the MODEL_NAME environment variable or defaults to "gpt-4".
 
     Returns:
         int: The number of tokens in the input string.
     """
-    # Use the MODEL_NAME env var if no model is provided; otherwise default to "gpt-4o"
-    model = model or os.environ.get("MODEL_NAME", "gpt-4o")
-    tokenizer_encoding = tiktoken.encoding_for_model(model)
+    # Use the MODEL_NAME env var if no model is provided; otherwise default to "gpt-4"
+    if model is None:
+        model = os.getenv("MODEL_NAME", "gpt-4")
+    
+    # Map Azure deployment names to tiktoken-compatible model names
+    # Common mappings for Azure OpenAI deployments
+    model_mapping = {
+        "gpt-4.1": "gpt-4",  # Azure deployment name -> tiktoken model name
+        "gpt-35-turbo": "gpt-3.5-turbo",
+        "gpt-4o": "gpt-4o",
+    }
+    
+    # Use mapped model name if available, otherwise use original
+    tiktoken_model = model_mapping.get(model, model)
+    
+    try:
+        tokenizer_encoding = tiktoken.encoding_for_model(tiktoken_model)
+    except KeyError:
+        # If model name is still not recognized, use cl100k_base (GPT-4 encoding) as fallback
+        logger.warning(
+            f"Model '{model}' (mapped to '{tiktoken_model}') not recognized by tiktoken. "
+            f"Using 'cl100k_base' encoding as fallback."
+        )
+        tokenizer_encoding = tiktoken.get_encoding("cl100k_base")
+    
     number_of_tokens = len(tokenizer_encoding.encode(input_text))
     return number_of_tokens
-
 
 def build_prompt(
     prompt_template: PromptTemplate, input_batch: pd.DataFrame, **kwargs
