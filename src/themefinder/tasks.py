@@ -24,6 +24,17 @@ from themefinder.themefinder_logging import logger
 
 CONSULTATION_SYSTEM_PROMPT = load_prompt_from_file("consultation_system_prompt")
 
+def _structured_output(llm: RunnableWithFallbacks, schema):
+    """
+    Return a runnable that yields ONLY the structured output (no raw AIMessage),
+    to avoid Pydantic serialization warnings on AIMessage.parsed.
+    """
+    try:
+        return llm.with_structured_output(schema, include_raw=False)
+    except TypeError:
+        # Backwards-compat for older langchain_core versions
+        return llm.with_structured_output(schema)
+
 
 async def find_themes(
     responses_df: pd.DataFrame,
@@ -173,7 +184,7 @@ async def sentiment_analysis(
     sentiment, unprocessable = await batch_and_run(
         responses_df,
         prompt_template,
-        llm.with_structured_output(SentimentAnalysisResponses),
+        _structured_output(llm, SentimentAnalysisResponses),
         batch_size=batch_size,
         question=question,
         integrity_check=True,
@@ -227,7 +238,7 @@ async def theme_generation(
     generated_themes, _ = await batch_and_run(
         responses_df,
         prompt_template,
-        llm.with_structured_output(ThemeGenerationResponses),
+        _structured_output(llm, ThemeGenerationResponses),
         batch_size=batch_size,
         partition_key=partition_key,
         question=question,
@@ -286,7 +297,7 @@ async def theme_condensation(
         themes_df, _ = await batch_and_run(
             themes_df,
             prompt_template,
-            llm.with_structured_output(ThemeCondensationResponses),
+            _structured_output(llm, ThemeCondensationResponses),
             batch_size=batch_size,
             question=question,
             system_prompt=system_prompt,
@@ -306,7 +317,7 @@ async def theme_condensation(
     themes_df, _ = await batch_and_run(
         themes_df,
         prompt_template,
-        llm.with_structured_output(ThemeCondensationResponses),
+        _structured_output(llm, ThemeCondensationResponses),
         batch_size=batch_size,
         question=question,
         system_prompt=system_prompt,
@@ -453,7 +464,7 @@ async def theme_refinement(
     refined_themes, _ = await batch_and_run(
         condensed_themes_df,
         prompt_template,
-        llm.with_structured_output(ThemeRefinementResponses),
+        _structured_output(llm, ThemeRefinementResponses),
         batch_size=batch_size,
         question=question,
         system_prompt=system_prompt,
@@ -539,7 +550,7 @@ async def theme_target_alignment(
     aligned_themes, _ = await batch_and_run(
         refined_themes_df,
         prompt_template,
-        llm.with_structured_output(ThemeRefinementResponses),
+        _structured_output(llm, ThemeRefinementResponses),
         batch_size=batch_size,
         question=question,
         system_prompt=system_prompt,
@@ -615,7 +626,7 @@ async def theme_mapping(
     mapping, unprocessable = await batch_and_run(
         responses_df,
         prompt_template,
-        llm.with_structured_output(ThemeMappingResponses),
+        _structured_output(llm, ThemeMappingResponses),
         batch_size=batch_size,
         question=question,
         refined_themes=transpose_refined_themes(refined_themes_df).to_dict(
@@ -671,7 +682,7 @@ async def detail_detection(
     detailed, _ = await batch_and_run(
         responses_df,
         prompt_template,
-        llm.with_structured_output(DetailDetectionResponses),
+        _structured_output(llm, DetailDetectionResponses),
         batch_size=batch_size,
         question=question,
         integrity_check=True,

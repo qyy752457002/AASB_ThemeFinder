@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
@@ -20,6 +21,16 @@ from tenacity import (
 )
 
 from themefinder.themefinder_logging import logger
+
+# LangChain's AIMessage may carry a `.parsed` attribute containing our structured
+# Pydantic output. Pydantic can emit noisy serialization warnings about this field
+# ("Expected `none`" for `parsed`) even though our pipeline uses the structured
+# object directly. Silence only these warnings.
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    message=r"^Pydantic serializer warnings:",
+)
 
 @dataclass
 class BatchPrompt:
