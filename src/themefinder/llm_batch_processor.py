@@ -315,11 +315,21 @@ async def call_llm(
         async with semaphore:
             try:
                 llm_response = await llm.ainvoke(batch_prompt.prompt_string)
-                all_results = (
-                    llm_response.dict()
-                    if hasattr(llm_response, "dict")
-                    else llm_response
-                )
+                # Unwrap LangChain AIMessage.parsed to avoid Pydantic serialization
+                # warning when AIMessage.parsed holds our structured output
+                structured = getattr(llm_response, "parsed", None)
+                if structured is not None:
+                    all_results = (
+                        structured.model_dump()
+                        if hasattr(structured, "model_dump")
+                        else structured.dict()
+                    )
+                else:
+                    all_results = (
+                        llm_response.dict()
+                        if hasattr(llm_response, "dict")
+                        else llm_response
+                    )
                 responses = (
                     all_results["responses"]
                     if isinstance(all_results, dict)
