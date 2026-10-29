@@ -447,6 +447,7 @@ def calculate_string_token_length(input_text: str, model: str = None) -> int:
     # Common mappings for Azure OpenAI deployments
     model_mapping = {
         "gpt-4.1": "gpt-4",  # Azure deployment name -> tiktoken model name
+        "gpt-5.4-nano": "gpt-4",
         "gpt-35-turbo": "gpt-3.5-turbo",
         "gpt-4o": "gpt-4o",
     }
