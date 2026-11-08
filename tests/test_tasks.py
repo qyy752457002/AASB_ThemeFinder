@@ -28,6 +28,8 @@ from themefinder.models import (
     CrossCuttingThemeDefinition,
     CrossCuttingThemeMappingResponse,
     CrossCuttingThemeMapping,
+    RefinedTheme,
+    ThemeRefinementResponses,
 )
 
 
@@ -295,6 +297,48 @@ async def test_theme_refinement(mock_llm):
         assert "topic_id" in result.columns
         assert "topic" in result.columns
         assert mock_call_llm.await_count == 1
+
+
+@pytest.mark.asyncio
+async def test_theme_refinement_builds_topic_from_structured_output():
+    """Runs the real call_llm path: the LLM returns label and description
+    separately and the refined DataFrame carries the joined topic."""
+    condensed_df = pd.DataFrame(
+        {
+            "topic_label": ["Interim reporting", "Scope 3 emissions"],
+            "topic_description": ["Interim disclosures.", "Scope 3 measurement."],
+            "source_topic_count": [2, 1],
+        }
+    )
+    structured_llm = AsyncMock()
+    structured_llm.ainvoke.return_value = ThemeRefinementResponses(
+        responses=[
+            RefinedTheme(
+                topic_label="Interim climate-related disclosures:",
+                topic_description="Whether interim reports include climate disclosures.",
+                source_topic_count=2,
+            ),
+            RefinedTheme(
+                topic_label="Scope 3 emissions measurement",
+                topic_description="Methods for measuring Scope 3 emissions.",
+                source_topic_count=1,
+            ),
+        ]
+    )
+    llm = Mock()
+    llm.with_structured_output.return_value = structured_llm
+
+    result, unprocessable = await theme_refinement(
+        condensed_df, llm, question="test question"
+    )
+
+    assert unprocessable.empty
+    assert result["topic"].tolist() == [
+        "Interim climate-related disclosures: Whether interim reports include climate disclosures.",
+        "Scope 3 emissions measurement: Methods for measuring Scope 3 emissions.",
+    ]
+    assert result["topic_id"].tolist() == ["A", "B"]
+    assert structured_llm.ainvoke.await_count == 1
 
 
 @pytest.mark.asyncio

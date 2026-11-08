@@ -74,10 +74,10 @@ class TestSentimentAnalysisOutput:
         "position",
         [
             Position.AGREEMENT,
-            Position.OPTION_A,
-            Position.OPTION_IV,
-            Position.YES,
-            Position.ANSWER_PROVIDED,
+            Position.OPTION_1,
+            Position.OPTION_OTHER,
+            Position.ANSWERED,
+            Position.NO_ADDITIONAL_GUIDANCE,
         ],
     )
     def test_valid_extended_positions(self, position):
@@ -172,26 +172,54 @@ class TestThemeCondensationResponses:
 
 
 class TestRefinedTheme:
-    def test_valid_refined_theme(self):
+    def test_topic_joins_label_and_description(self):
         theme = RefinedTheme(
-            topic="Healthcare: Access to affordable healthcare services",
+            topic_label="Healthcare",
+            topic_description="Access to affordable healthcare services",
             source_topic_count=3,
         )
         assert theme.topic == "Healthcare: Access to affordable healthcare services"
+        assert theme.model_dump()["topic"] == theme.topic
 
-    def test_invalid_topic_format(self):
-        with pytest.raises(ValueError, match="must contain a label and description"):
+    def test_topic_is_not_requested_from_llm(self):
+        properties = RefinedTheme.model_json_schema()["properties"]
+        assert set(properties) == {
+            "topic_label",
+            "topic_description",
+            "source_topic_count",
+        }
+
+    def test_label_colons_are_normalised(self):
+        # gpt-5.4-nano returned labels like "Interim climate-related disclosures:"
+        model = ThemeRefinementResponses.model_validate_json(
+            '{"responses": ['
+            '{"topic_label": "Interim climate-related disclosures:",'
+            ' "topic_description": " Timing of interim disclosures. ",'
+            ' "source_topic_count": 2},'
+            '{"topic_label": "Scope 3: financed emissions",'
+            ' "topic_description": "Measurement approach.",'
+            ' "source_topic_count": 1}]}'
+        )
+        assert [t.topic for t in model.responses] == [
+            "Interim climate-related disclosures: Timing of interim disclosures.",
+            "Scope 3 - financed emissions: Measurement approach.",
+        ]
+
+    def test_empty_description_rejected(self):
+        with pytest.raises(ValueError, match="topic_description cannot be empty"):
             RefinedTheme(
-                topic="Healthcare without separator",
+                topic_label="Interim reporting",
+                topic_description="  ",
                 source_topic_count=1,
-            ).validate_topic_format()
+            )
 
     def test_topic_label_too_long(self):
         with pytest.raises(ValueError, match="must be under 10 words"):
             RefinedTheme(
-                topic="This is a very long topic label that exceeds the limit of ten words: Description",
+                topic_label="This is a very long topic label that exceeds the limit of ten words",
+                topic_description="Description",
                 source_topic_count=1,
-            ).validate_topic_format()
+            )
 
 
 class TestThemeRefinementResponses:
@@ -199,13 +227,13 @@ class TestThemeRefinementResponses:
         model = ThemeRefinementResponses(
             responses=[
                 RefinedTheme(
-                    topic_id="A",
-                    topic="Healthcare: Access to affordable healthcare",
+                    topic_label="Healthcare",
+                    topic_description="Access to affordable healthcare",
                     source_topic_count=3,
                 ),
                 RefinedTheme(
-                    topic_id="B",
-                    topic="Education: Quality of public education",
+                    topic_label="Education",
+                    topic_description="Quality of public education",
                     source_topic_count=2,
                 ),
             ]
@@ -217,11 +245,13 @@ class TestThemeRefinementResponses:
             ThemeRefinementResponses(
                 responses=[
                     RefinedTheme(
-                        topic="Healthcare: Description",
+                        topic_label="Healthcare",
+                        topic_description="Description",
                         source_topic_count=1,
                     ),
                     RefinedTheme(
-                        topic="Healthcare: Description",
+                        topic_label="Healthcare",
+                        topic_description="Description",
                         source_topic_count=2,
                     ),
                 ]

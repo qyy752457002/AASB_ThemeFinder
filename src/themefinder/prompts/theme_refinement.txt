@@ -54,29 +54,25 @@ OUTPUT FORMAT (MANDATORY)
 
 For EACH refined theme, output:
 
-• topic  
-  – MUST be formatted exactly as:
-    "Label: Description"
+• topic_label
+  – 3–7 words
+  – Neutral, technical phrasing
+  – No emotive or evaluative language
+  – Label only: no colon (:) and no description text
 
-  – Label:
-    * 3–7 words
-    * Neutral, technical phrasing
-    * No emotive or evaluative language
+• topic_description
+  – 1–2 sentences
+  – Precise and specific
+  – Describes the issue, concern, or consideration clearly
+  – Does NOT state whether it is good or bad
 
-  – Description:
-    * 1–2 sentences
-    * Precise and specific
-    * Describes the issue, concern, or consideration clearly
-    * Does NOT state whether it is good or bad
-
-• source_topic_count  
+• source_topic_count
   – Retain the aggregated count from the condensation stage
   – Represents signal strength, not respondent count
 
 ***STRICT FORMAT RULES***
-• There MUST be exactly ONE colon (:)
-• Both label and description must be non-empty
-• Topics without a colon will be rejected
+• topic_label and topic_description are separate fields; never merge them
+• Both topic_label and topic_description must be non-empty
 
 ==================================================
 REFINEMENT GUIDELINES
@@ -108,9 +104,10 @@ INPUT THEME:
   source_topic_count: 6
 
 REFINED OUTPUT:
-• topic: Proportionality of compliance costs: The potential for climate-related
-  disclosure requirements to impose disproportionate compliance costs on
-  smaller or less-resourced reporting entities.
+• topic_label: Proportionality of compliance costs
+  topic_description: The potential for climate-related disclosure requirements
+  to impose disproportionate compliance costs on smaller or less-resourced
+  reporting entities.
   source_topic_count: 6
 
 ==================================================

@@ -1,6 +1,7 @@
-from typing import List, Optional
+import re
+from typing import Any, List, Optional
 from enum import Enum
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, computed_field, model_validator
 class Position(str, Enum):
     """
     All valid POSITION values across sentiment prompt question types,
@@ -234,39 +235,54 @@ class ThemeCondensationResponses(ValidatedModel):
 
 
 class RefinedTheme(ValidatedModel):
-    """Model for a single refined theme"""
+    """Model for a single refined theme.
 
-    topic: str = Field(
-        ..., description="Topic label and description combined with a colon separator"
+    The LLM fills ``topic_label`` and ``topic_description`` as separate fields and
+    ``topic`` ("Label: Description") is built from them. Asking the model for one
+    colon-separated string was unreliable: small models returned "Label:" with no
+    description, or no colon at all, and one bad item failed the whole batch.
+    """
+
+    topic_label: str = Field(
+        ...,
+        description="Short, neutral label for the theme (3-7 words), without a colon",
+    )
+    topic_description: str = Field(
+        ...,
+        description="One or two neutral sentences describing the issue the theme covers",
     )
     source_topic_count: int = Field(
         ..., gt=0, description="Count of source topics combined"
     )
 
+    @computed_field
+    @property
+    def topic(self) -> str:
+        """Label and description as "Label: Description", the format used downstream."""
+        return f"{self.topic_label}: {self.topic_description}"
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalise_fields(cls, data: Any) -> Any:
+        """Trim whitespace, drop a trailing colon from the label and replace any inner
+        colon with " - ", so the first colon in ``topic`` always ends the label."""
+        if not isinstance(data, dict):
+            return data
+        data = dict(data)
+        if isinstance(data.get("topic_label"), str):
+            label = data["topic_label"].strip().rstrip(":").strip()
+            data["topic_label"] = re.sub(r"\s*:\s*", " - ", label)
+        if isinstance(data.get("topic_description"), str):
+            data["topic_description"] = data["topic_description"].strip()
+        return data
+
     @model_validator(mode="after")
     def run_validations(self) -> "RefinedTheme":
         """Run all validations for RefinedTheme"""
         self.validate_non_empty_fields()
-        self.validate_topic_format()
-        return self
-
-    def validate_topic_format(self) -> "RefinedTheme":
-        """
-        Validate that topic contains a label and description separated by a colon.
-        """
-        if ":" not in self.topic:
-            raise ValueError(
-                "Topic must contain a label and description separated by a colon"
-            )
-
-        label, description = self.topic.split(":", 1)
-        if not label.strip() or not description.strip():
-            raise ValueError("Both label and description must be non-empty")
-
-        word_count = len(label.strip().split())
+        word_count = len(self.topic_label.split())
         if word_count > 10:
             raise ValueError(f"Topic label must be under 10 words (found {word_count})")
-
         return self
 
 

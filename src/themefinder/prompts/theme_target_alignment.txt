@@ -76,12 +76,13 @@ You MUST return AT MOST {target_n_themes} themes.
 
 For EACH aligned theme, output:
 
-• theme_label  
+• topic_label
   – High-level, policy-facing
   – 3–6 words
   – Broad enough to cover multiple refined themes
+  – Label only: no colon (:) and no description text
 
-• theme_description  
+• topic_description
   – 2–3 sentences
   – Synthesises all underlying issues clearly
   – Written in neutral, regulatory language
@@ -111,8 +112,8 @@ INPUT REFINED THEMES:
 • Scalability of disclosure requirements
 
 ALIGNED OUTPUT:
-• theme_label: Cost, scalability and proportionality
-  theme_description: Issues relating to the cost of compliance,
+• topic_label: Cost, scalability and proportionality
+  topic_description: Issues relating to the cost of compliance,
   scalability of disclosure requirements, and the ability of
   smaller or less-resourced entities to implement climate-related
   financial reporting requirements proportionately and effectively.
